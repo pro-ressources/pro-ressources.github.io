@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProRessources - Plateforme Pro</title>
+    
+    <link rel="icon" href="logo.png" type="image/png">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.css">
+    <link rel="manifest" href="manifest.json">
+        <meta name="theme-color" content="#0f172a">
+        <link rel="apple-touch-icon" href="logo.png">
+
+        <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+        </script>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3444819884847108" crossorigin="anonymous"></script>
+
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
+    <style>
+        :root { --primary: #0f172a; --accent: #F97316; --bg-light: #F8FAFC; --text-dark: #334155; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-light); color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* NAVBAR */
+        .navbar-custom { background-color: var(--primary); padding: 1rem 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .navbar-brand { font-weight: 700; font-size: 1.25rem; color: white !important; }
+        .nav-link { color: #94a3b8 !important; font-weight: 500; margin: 0 10px; transition: all 0.3s; position: relative; }
+        .nav-link:hover, .nav-link.active { color: white !important; }
+        .nav-link.active::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: var(--accent); }
+
+        /* UI */
+        .card-custom { border: none; border-radius: 16px; background: white; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 24px; }
+        .form-control-custom, .form-select-custom { border-radius: 10px; padding: 12px; border: 1px solid #e2e8f0; }
+        
+        /* TABLEAU */
+        .table-custom th { background-color: var(--primary); color: white; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; padding: 16px; border-bottom: 1px solid #e2e8f0; }
+        .table-custom td { vertical-align: middle; padding: 16px; background: white; border-bottom: 1px solid #f1f5f9; }
+        .table-row-hover:hover td { background-color: #fff7ed; }
+        
+        .clickable-header { cursor: pointer; transition: background 0.2s; }
+        .clickable-header:hover { background-color: #1e293b !important; }
+        .clickable-header i { margin-left: 5px; opacity: 0.7; }
+
+        /* FAVORIS */
+        .btn-fav { cursor: pointer; color: #cbd5e1; transition: transform 0.2s, color 0.2s; font-size: 1.2rem; margin-right: 10px; }
+        .btn-fav:hover { transform: scale(1.2); color: #fbbf24; }
+        .btn-fav.active { color: #fbbf24; }
+
+        .badge-soft { padding: 6px 12px; border-radius: 99px; font-size: 0.75em; font-weight: 600; }
+        .badge-purple { background: #F3E8FF; color: #7E22CE; } .badge-blue { background: #E0F2FE; color: #0369A1; }
+        .badge-orange { background: #FFEDD5; color: #C2410C; } .badge-green { background: #DCFCE7; color: #15803D; }
+        .badge-gray { background: #F1F5F9; color: #475569; }
+
+        .btn-visit { background-color: var(--accent); color: white; border: none; border-radius: 8px; padding: 8px 16px; font-weight: 600; transition: all 0.2s; }
+        .btn-visit:hover { background-color: #ea580c; color: white; transform: translateY(-1px); }
+
+        /* PUBS */
+        .ad-sidebar { position: fixed; top: 50%; transform: translateY(-50%); width: 160px; height: 600px; background: white; border: 1px dashed #cbd5e1; display: none; z-index: 1000; text-align: center; padding: 0; overflow: hidden; }
+        .ad-sidebar.left { left: 20px; } .ad-sidebar.right { right: 20px; }
+        @media (max-width: 1200px) { .ad-sidebar { display: none !important; } }
+        @media (min-width: 1200px) { .container { max-width: calc(100vw - 420px) !important; } }
+
+        .footer { margin-top: auto; background: white; border-top: 1px solid #e2e8f0; padding: 30px 0; text-align: center; color: #64748b; font-size: 0.9rem; }
+        .fade-in { animation: fadeIn 0.4s ease; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .loading-spinner { width: 3rem; height: 3rem; border: 4px solid #f3f3f3; border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 50px auto; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        .result-box { background: #f1f5f9; padding: 15px; border-radius: 8px; text-align: center; margin-top: 15px; font-weight: bold; color: var(--primary); }
+        model-viewer { width: 100%; height: 400px; background-color: #f8fafc; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+    <div class="modal fade" id="modal3D" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-box-seam me-2"></i>Visualisation 3D</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <model-viewer id="viewer3d" src="" alt="Modèle 3D" auto-rotate camera-controls shadow-intensity="1" touch-action="pan-y"></model-viewer>
+                    <div class="text-center py-2 text-muted small">Cliquez et glissez pour tourner • Molette pour zoomer</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ad-left" class="ad-sidebar left">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3444819884847108" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-3444819884847108" data-ad-slot="6690962979"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+    <div id="ad-right" class="ad-sidebar right">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3444819884847108" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-3444819884847108" data-ad-slot="6690962979"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="bi bi-buildings-fill me-2 text-warning"></i> ProRessources
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto ms-3">
+                    <li class="nav-item"><a class="nav-link active" href="#" id="btn-annuaire" onclick="changerOnglet('annuaire')">Annuaire</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" id="btn-outils" onclick="changerOnglet('outils')"><i class="bi bi-tools me-1"></i> Outils</a></li>
+                    <li class="nav-item" id="nav-biblio-li" style="display: none;"><a class="nav-link" href="#" id="btn-biblio" onclick="changerOnglet('biblio')">Bibliothèque 3D</a></li>
+                    <li class="nav-item" id="nav-favoris-li" style="display: none;"><a class="nav-link" href="#" id="btn-favoris" onclick="changerOnglet('favoris')"><i class="bi bi-star-fill text-warning me-1"></i> Favoris</a></li>
+                    <li class="nav-item" id="nav-admin" style="display: none;"><a class="nav-link text-danger fw-bold" href="#" id="btn-admin" onclick="changerOnglet('admin')"><i class="bi bi-shield-lock-fill me-1"></i> ADMIN</a></li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div id="logged-out-view" style="display: block;"><button onclick="loginWithGoogle()" class="btn btn-sm btn-outline-light px-3 fw-bold"><i class="bi bi-google me-2"></i>Connexion</button></div>
+                    <div id="logged-in-view" style="display: none;">
+                        <div class="d-flex align-items-center">
+                            <img id="user-photo" src="" class="rounded-circle border border-2 border-white me-2" style="width: 36px; height: 36px;">
+                            <div class="d-flex flex-column me-3 line-height-1"><span id="user-name" class="text-white fw-bold" style="font-size: 0.9rem;">User</span><small class="text-secondary" style="font-size: 0.75rem;">En ligne</small></div>
+                            <a href="#" onclick="logout()" class="text-secondary hover-white" title="Déconnexion"><i class="bi bi-box-arrow-right fs-5"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4" style="flex: 1;">
+        
+        <div id="section-annuaire" class="fade-in">
+            <div class="mb-4"><h2 class="fw-bold mb-1">Annuaire Fournisseurs</h2></div>
+            <div class="row mb-4">
+                <div class="col-md-3"><div class="card-custom d-flex align-items-center p-3"><div class="rounded-circle bg-light p-3 me-3 text-primary"><i class="bi bi-people-fill fs-4"></i></div><div><h3 class="m-0 fw-bold" id="stat-f-total">0</h3><small class="text-muted">Fournisseurs</small></div></div></div>
+                <div class="col-md-3"><div class="card-custom d-flex align-items-center p-3"><div class="rounded-circle bg-light p-3 me-3 text-success"><i class="bi bi-tags-fill fs-4"></i></div><div><h3 class="m-0 fw-bold" id="stat-f-cat">0</h3><small class="text-muted">Catégories</small></div></div></div>
+            </div>
+            <div class="card-custom mb-4 p-3">
+                <div class="row g-2">
+                    <div class="col-md-8"><div class="input-group"><span class="input-group-text bg-white border-end-0 ps-3"><i class="bi bi-search text-muted"></i></span><input type="text" id="searchInput" class="form-control form-control-custom border-start-0" placeholder="Rechercher..."></div></div>
+                    <div class="col-md-4"><select id="typeFilter" class="form-select form-select-custom"><option value="">Toutes catégories</option><option value="Quincaillerie">Quincaillerie</option><option value="Bois">Bois</option><option value="Électricité">Électricité</option><option value="Isolation">Isolation</option><option value="Métal">Métal</option></select></div>
+                </div>
+            </div>
+            <div class="card-custom p-0 overflow-hidden">
+                <div id="loader-annuaire" class="text-center py-5"><div class="loading-spinner"></div><p class="text-muted">Chargement...</p></div>
+                <div class="table-responsive">
+                    <table class="table table-custom table-hover m-0" id="table-annuaire-wrap" style="display:none;">
+                        <thead><tr><th class="ps-4 clickable-header" onclick="trier('nom')">Fournisseur <i class="bi bi-sort-alpha-down ms-1"></i></th><th class="clickable-header" onclick="trier('categorie')">Catégorie <i class="bi bi-filter ms-1"></i></th><th>Description</th><th>Produit</th><th class="text-end pe-4">Action</th></tr></thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-outils" class="fade-in" style="display: none;">
+            <div class="mb-4">
+                <h2 class="fw-bold mb-1">Boîte à Outils</h2>
+                <p class="text-muted">Calculatrices rapides.</p>
+                <div class="alert alert-warning py-2" style="font-size: 0.8rem;">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <strong>Attention :</strong> Ces outils sont fournis à titre indicatif. Vérifiez toujours vos calculs. L'auteur décline toute responsabilité en cas d'erreur.
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card-custom h-100">
+                        <div class="d-flex align-items-center mb-3"><div class="rounded-circle bg-light p-3 me-3 text-primary"><i class="bi bi-calculator fs-4"></i></div><h5 class="fw-bold m-0">Poids Panneau</h5></div>
+                        <div class="mb-2"><label class="small text-muted">Dimensions (mm)</label><div class="input-group mb-2"><input type="number" id="calc-L" class="form-control" placeholder="L (ex: 2500)" oninput="calcPoids()"><span class="input-group-text">x</span><input type="number" id="calc-l" class="form-control" placeholder="l (ex: 1200)" oninput="calcPoids()"></div></div>
+                        <div class="mb-2"><label class="small text-muted">Épaisseur (mm)</label><input type="number" id="calc-ep" class="form-control" placeholder="Ex: 19" oninput="calcPoids()"></div>
+                        <div class="mb-3"><label class="small text-muted">Matériau</label><select id="calc-mat" class="form-select" onchange="calcPoids()"><option value="750">MDF (750)</option><option value="650">Aggloméré (650)</option><option value="600">Contreplaqué (600)</option><option value="700">Bois Massif (700)</option><option value="2500">Verre (2500)</option><option value="7850">Acier (7850)</option><option value="2700">Alu (2700)</option><option value="7930">Inox (7930)</option></select></div>
+                        <div class="result-box">Poids : <span id="res-poids">0.00</span> kg</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-custom h-100">
+                        <div class="d-flex align-items-center mb-3"><div class="rounded-circle bg-light p-3 me-3 text-success"><i class="bi bi-paint-bucket fs-4"></i></div><h5 class="fw-bold m-0">Surface Peinture</h5></div>
+                        <div class="mb-2"><label class="small text-muted">Mur (L x H en m)</label><div class="input-group mb-2"><input type="number" id="surf-L" class="form-control" placeholder="L" oninput="calcSurf()"><span class="input-group-text">x</span><input type="number" id="surf-H" class="form-control" placeholder="H" oninput="calcSurf()"></div></div>
+                        <div class="mb-3"><label class="small text-muted">Déductions (m²)</label><input type="number" id="surf-deduct" class="form-control" placeholder="Ex: 2.5" value="0" oninput="calcSurf()"></div>
+                        <div class="result-box">Surface : <span id="res-surf">0.00</span> m²</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-custom h-100">
+                        <div class="d-flex align-items-center mb-3"><div class="rounded-circle bg-light p-3 me-3 text-warning"><i class="bi bi-arrow-left-right fs-4"></i></div><h5 class="fw-bold m-0">Convertisseur</h5></div>
+                        <div class="mb-3"><label class="small text-muted">Pouces</label><input type="number" id="conv-inch" class="form-control" placeholder="1" oninput="convInchToMm()"></div>
+                        <div class="mb-3"><label class="small text-muted">Millimètres</label><input type="number" id="conv-mm" class="form-control" placeholder="25.4" oninput="convMmToInch()"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-biblio" class="fade-in" style="display: none;">
+            <div class="mb-4"><h2 class="fw-bold mb-1">Bibliothèque Technique</h2><p class="text-muted">Modèles 3D et plans.</p></div>
+            <div class="row mb-4"><div class="col-md-3"><div class="card-custom d-flex align-items-center p-3"><div class="rounded-circle bg-light p-3 me-3 text-warning"><i class="bi bi-box-fill fs-4"></i></div><div><h3 class="m-0 fw-bold" id="stat-b-total">0</h3><small class="text-muted">Fichiers</small></div></div></div></div>
+            <div id="auth-wall" class="card-custom text-center py-5 mb-4 border-0" style="background: linear-gradient(135deg, #fff 0%, #f1f5f9 100%);"><div class="mb-3"><i class="bi bi-shield-lock text-warning" style="font-size: 3.5rem;"></i></div><h3 class="fw-bold mb-3">Accès Réservé</h3><button onclick="loginWithGoogle()" class="btn btn-dark btn-lg px-5 shadow-lg rounded-pill"><i class="bi bi-google me-2"></i> Connexion</button></div>
+            <div id="biblio-content" style="display: none;">
+                <div class="card-custom mb-4 p-3">
+                    <div class="row g-2">
+                        <div class="col-md-6"><div class="input-group"><span class="input-group-text bg-white border-end-0 ps-3"><i class="bi bi-search text-muted"></i></span><input type="text" id="searchBiblio" class="form-control form-control-custom border-start-0" placeholder="Rechercher..."></div></div>
+                        <div class="col-md-3"><select id="filterLogiciel" class="form-select form-select-custom"><option value="">Tous logiciels</option><option value="SolidWorks">SolidWorks</option><option value="SketchUp">SketchUp</option><option value="AutoCAD">AutoCAD</option></select></div>
+                    </div>
+                </div>
+                <div class="card-custom p-0 overflow-hidden">
+                    <div id="loader-biblio" class="text-center py-5"><div class="loading-spinner"></div><p class="text-muted">Chargement...</p></div>
+                    <div class="table-responsive"><table class="table table-custom table-hover m-0" id="table-biblio-wrap" style="display:none;"><thead><tr><th class="ps-4">Nom</th><th>Logiciel</th><th>Description</th><th>Catégorie</th><th class="text-end pe-4">Action</th></tr></thead><tbody id="biblioBody"></tbody></table></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-favoris" class="fade-in" style="display: none;">
+            <div class="mb-4"><h2 class="fw-bold mb-1">Mes Favoris</h2><p class="text-muted">Vos ressources sauvegardées.</p></div>
+            <div class="card-custom p-0 overflow-hidden"><div class="table-responsive"><table class="table table-custom table-hover m-0"><thead><tr><th class="ps-4">Nom</th><th>Type</th><th>Infos</th><th class="text-end pe-4">Action</th></tr></thead><tbody id="favBody"><tr><td colspan="4" class="text-center p-4 text-muted">Vous n'avez pas encore de favoris.</td></tr></tbody></table></div></div>
+        </div>
+
+        <div id="section-admin" class="fade-in" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4"><h2 class="fw-bold text-danger">Administration</h2><button onclick="resetAdminForms()" class="btn btn-outline-secondary btn-sm">Reset</button></div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card-custom border-top border-4 border-danger">
+                        <h5 class="fw-bold mb-3">Fournisseurs</h5>
+                        <form id="formFournisseur" onsubmit="sauvegarderFournisseur(event)">
+                            <input type="hidden" id="adm-f-uid"><div class="mb-2"><input type="text" id="adm-f-nom" class="form-control" placeholder="Nom" required></div><div class="mb-2"><select id="adm-f-cat" class="form-select"><option value="Quincaillerie">Quincaillerie</option><option value="Bois">Bois</option><option value="Électricité">Électricité</option><option value="Isolation">Isolation</option><option value="Métal">Métal</option><option value="Carrelage">Carrelage</option></select></div><div class="mb-2"><input type="text" id="adm-f-desc" class="form-control" placeholder="Description"></div><div class="mb-2"><input type="text" id="adm-f-prod" class="form-control" placeholder="Produit"></div><div class="mb-3"><input type="url" id="adm-f-lien" class="form-control" placeholder="Lien" required></div><button type="submit" id="btn-save-f" class="btn btn-dark w-100">Enregistrer</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card-custom border-top border-4 border-primary">
+                        <h5 class="fw-bold mb-3">Bibliothèque</h5>
+                        <form id="formBiblio" onsubmit="sauvegarderFichier(event)">
+                            <input type="hidden" id="adm-b-uid">
+                            <div class="mb-2"><input type="text" id="adm-b-nom" class="form-control" placeholder="Nom" required></div>
+                            <div class="row g-2 mb-2"><div class="col"><select id="adm-b-log" class="form-select"><option value="SolidWorks">SolidWorks</option><option value="SketchUp">SketchUp</option><option value="AutoCAD">AutoCAD</option></select></div><div class="col"><input type="text" id="adm-b-type" class="form-control" placeholder="Ext"></div></div>
+                            <div class="mb-2"><input type="text" id="adm-b-cat" class="form-control" placeholder="Catégorie"></div>
+                            <div class="mb-2"><input type="text" id="adm-b-desc" class="form-control" placeholder="Desc"></div>
+                            <div class="mb-2"><input type="url" id="adm-b-lien" class="form-control" placeholder="Lien DL" required></div>
+                            <div class="mb-2"><input type="url" id="adm-b-visu" class="form-control" placeholder="Lien Visu 3D (.glb)"></div>
+                            <div class="mb-3"><input type="number" id="adm-b-prix" class="form-control" placeholder="Prix" value="0"></div>
+                            <button type="submit" id="btn-save-b" class="btn btn-dark w-100">Enregistrer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-auto py-4 bg-white border-top">
+        <div class="container text-center">
+            <p class="m-0 fw-bold mb-2">ProRessources &copy; 2025</p>
+            <div class="small text-muted">
+                <a href="#" onclick="Swal.fire('Mentions Légales', 'Site personnel à but non commercial.<br>Hébergement : Netlify Inc, San Francisco.<br>Contact : via le formulaire Google.', 'info')" class="text-decoration-none text-muted me-3">Mentions Légales</a>
+                <a href="#" onclick="Swal.fire('Confidentialité', 'Nous utilisons des cookies pour les préférences et la publicité (Google). Vos favoris sont stockés via Google Firebase. Vous pouvez demander la suppression de vos données sur simple demande.', 'info')" class="text-decoration-none text-muted me-3">Confidentialité (RGPD)</a>
+                <span class="text-muted">V 3.0</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+    
+    <script>
+        function calcPoids() {
+            const L = (parseFloat(document.getElementById('calc-L').value) || 0) / 1000;
+            const l = (parseFloat(document.getElementById('calc-l').value) || 0) / 1000;
+            const ep = (parseFloat(document.getElementById('calc-ep').value) || 0) / 1000;
+            const mat = parseFloat(document.getElementById('calc-mat').value) || 750;
+            document.getElementById('res-poids').innerText = (L * l * ep * mat).toFixed(2);
+        }
+        function calcSurf() {
+            const L = parseFloat(document.getElementById('surf-L').value) || 0;
+            const H = parseFloat(document.getElementById('surf-H').value) || 0;
+            const deduct = parseFloat(document.getElementById('surf-deduct').value) || 0;
+            let surf = (L * H) - deduct; if(surf < 0) surf = 0;
+            document.getElementById('res-surf').innerText = surf.toFixed(2);
+        }
+        function convInchToMm() {
+            const i = parseFloat(document.getElementById('conv-inch').value);
+            document.getElementById('conv-mm').value = !isNaN(i) ? (i * 25.4).toFixed(2) : "";
+        }
+        function convMmToInch() {
+            const m = parseFloat(document.getElementById('conv-mm').value);
+            document.getElementById('conv-inch').value = !isNaN(m) ? (m / 25.4).toFixed(3) : "";
+        }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, where, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyC70c8hVhGU7uFJad-Su2CMrm-TCxlbsoM", authDomain: "proressources-3dab4.firebaseapp.com", projectId: "proressources-3dab4", storageBucket: "proressources-3dab4.firebasestorage.app", messagingSenderId: "940538561110", appId: "1:940538561110:web:f8ca7e1cbc8e73b02c31f7" };
+        const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app); const provider = new GoogleAuthProvider(); const ADMIN_EMAIL = "3d.build.007@gmail.com";
+        let currentUser = null, fournisseursData = [], biblioData = [], triState = { col: 'nom', sens: 1 }, userFavorites = new Set(); 
+
+        window.loginWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e){ Swal.fire("Erreur", e.message, "error"); } }
+        window.logout = async () => { await signOut(auth); location.reload(); }
+        window.trier = function(col) { if(triState.col === col) triState.sens *= -1; else { triState.col = col; triState.sens = 1; } fa(); }
+        
+        // 3D VIEWER
+        window.open3DViewer = function(url) {
+            const viewer = document.getElementById('viewer3d');
+            viewer.src = url;
+            const modal = new window.bootstrap.Modal(document.getElementById('modal3D'));
+            modal.show();
+        }
+
+        async function loadFavorites() {
+            if (!currentUser) return;
+            const q = query(collection(db, "favoris"), where("uid", "==", currentUser.uid));
+            const qs = await getDocs(q); userFavorites.clear(); qs.forEach((d) => userFavorites.add(d.data().itemId)); fa(); fb();
+        }
+        window.toggleFavorite = async function(type, id) {
+            if (!currentUser) { Swal.fire("Oups", "Connectez-vous !", "warning"); return; }
+            const favId = currentUser.uid + "_" + id;
+            if (userFavorites.has(id)) {
+                try { await deleteDoc(doc(db, "favoris", favId)); userFavorites.delete(id); document.getElementById(`fav-btn-${id}`)?.classList.replace('bi-star-fill', 'bi-star'); document.getElementById(`fav-btn-${id}`)?.classList.remove('text-warning'); if(document.getElementById('section-favoris').style.display === 'block') renderFavoritesPage(); } catch(e) {}
+            } else {
+                try { await setDoc(doc(db, "favoris", favId), { uid: currentUser.uid, itemId: id, type: type }); userFavorites.add(id); document.getElementById(`fav-btn-${id}`)?.classList.replace('bi-star', 'bi-star-fill'); document.getElementById(`fav-btn-${id}`)?.classList.add('text-warning'); } catch(e) {}
+            }
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user; updateUIState(true, user); await loadFavorites();
+                const isAdmin = user.email === ADMIN_EMAIL; const isLamache = user.email.endsWith("@lamache.org");
+                if (isAdmin) { document.getElementById('nav-admin').style.display = 'block'; document.getElementById('nav-biblio-li').style.display = 'block'; toggleAds(false); }
+                else if (isLamache) { document.getElementById('nav-admin').style.display = 'none'; document.getElementById('nav-biblio-li').style.display = 'none'; toggleAds(false); }
+                else { document.getElementById('nav-admin').style.display = 'none'; document.getElementById('nav-biblio-li').style.display = 'block'; toggleAds(true); }
+                document.getElementById('nav-favoris-li').style.display = 'block';
+                if(fournisseursData.length > 0) renderFournisseurs(fournisseursData);
+            } else {
+                currentUser = null; updateUIState(false, null); document.getElementById('nav-admin').style.display = 'none'; document.getElementById('nav-biblio-li').style.display = 'none'; document.getElementById('nav-favoris-li').style.display = 'none'; userFavorites.clear(); toggleAds(true);
+                if(fournisseursData.length > 0) renderFournisseurs(fournisseursData);
+            }
+        });
+
+        function toggleAds(show) { const d = show ? 'block' : 'none'; document.getElementById('ad-left').style.display = d; document.getElementById('ad-right').style.display = d; }
+        function updateUIState(isLoggedIn, user) {
+            if (isLoggedIn) { document.getElementById('logged-out-view').style.display = 'none'; document.getElementById('logged-in-view').style.display = 'block'; document.getElementById('user-name').innerText = user.displayName.split(' ')[0]; document.getElementById('user-photo').src = user.photoURL; loadBibliotheque(); }
+            else { document.getElementById('logged-out-view').style.display = 'block'; document.getElementById('logged-in-view').style.display = 'none'; }
+            document.getElementById('auth-wall').style.display = isLoggedIn ? 'none' : 'block'; document.getElementById('biblio-content').style.display = isLoggedIn ? 'block' : 'none';
+        }
+        window.changerOnglet = function(onglet) {
+            ['annuaire', 'outils', 'biblio', 'admin', 'favoris'].forEach(id => { document.getElementById('section-'+id).style.display = 'none'; if(document.getElementById('btn-'+id)) document.getElementById('btn-'+id).classList.remove('active'); });
+            document.getElementById('section-'+onglet).style.display = 'block'; if(document.getElementById('btn-'+onglet)) document.getElementById('btn-'+onglet).classList.add('active');
+            if(onglet === 'favoris') renderFavoritesPage();
+        }
+        function renderFavoritesPage() {
+            const tbody = document.getElementById('favBody'); tbody.innerHTML = ""; let count = 0;
+            fournisseursData.forEach(item => { if (userFavorites.has(item.docId)) { count++; tbody.innerHTML += `<tr><td class="fw-bold">${item.nom}</td><td><span class="badge badge-soft badge-blue">Fournisseur</span></td><td class="text-muted small">${item.desc}</td><td class="text-end"><a href="${item.lien}" target="_blank" class="btn btn-sm btn-outline-dark">Voir</a> <button onclick="toggleFavorite('fournisseurs', '${item.docId}')" class="btn btn-sm text-danger"><i class="bi bi-x-lg"></i></button></td></tr>`; } });
+            biblioData.forEach(item => { if (userFavorites.has(item.docId)) { count++; tbody.innerHTML += `<tr><td class="fw-bold">${item.nom}</td><td><span class="badge badge-soft badge-warning text-dark">3D</span></td><td class="text-muted small">${item.logiciel}</td><td class="text-end"><a href="${item.lien}" target="_blank" class="btn btn-sm btn-outline-dark">DL</a> <button onclick="toggleFavorite('biblio', '${item.docId}')" class="btn btn-sm text-danger"><i class="bi bi-x-lg"></i></button></td></tr>`; } });
+            if (count === 0) tbody.innerHTML = `<tr><td colspan="4" class="text-center p-5 text-muted"><i class="bi bi-star display-4 d-block mb-3"></i>Aucun favori.</td></tr>`;
+        }
+
+        window.supprimerItem = async function(col, id) { Swal.fire({title:'Sûr ?', icon:'warning', showCancelButton:true, confirmButtonColor:'#d33'}).then(async (r) => { if (r.isConfirmed) { await deleteDoc(doc(db, col, id)); col === "fournisseurs" ? loadFournisseurs(true) : loadBibliotheque(true); Swal.fire('Supprimé', '', 'success'); } }) }
+        window.editerFournisseur = function(id) { const i = fournisseursData.find(x => x.docId === id); document.getElementById('adm-f-uid').value = i.docId; document.getElementById('adm-f-nom').value = i.nom; document.getElementById('adm-f-cat').value = i.categorie; document.getElementById('adm-f-desc').value = i.desc; document.getElementById('adm-f-prod').value = i.produit; document.getElementById('adm-f-lien').value = i.lien; document.getElementById('btn-save-f').innerText = "Modifier"; document.getElementById('btn-save-f').classList.replace('btn-dark', 'btn-warning'); changerOnglet('admin'); }
+        window.editerBiblio = function(id) { const i = biblioData.find(x => x.docId === id); document.getElementById('adm-b-uid').value = i.docId; document.getElementById('adm-b-nom').value = i.nom; document.getElementById('adm-b-log').value = i.logiciel; document.getElementById('adm-b-type').value = i.type; document.getElementById('adm-b-cat').value = i.categorie; document.getElementById('adm-b-desc').value = i.desc; document.getElementById('adm-b-lien').value = i.lien; document.getElementById('adm-b-visu').value = i.lien3d || ""; document.getElementById('adm-b-prix').value = i.prix; document.getElementById('btn-save-b').innerText = "Modifier"; document.getElementById('btn-save-b').classList.replace('btn-dark', 'btn-warning'); changerOnglet('admin'); }
+        window.resetAdminForms = function() { document.getElementById('formFournisseur').reset(); document.getElementById('adm-f-uid').value = ""; document.getElementById('btn-save-f').innerText="Ajouter"; document.getElementById('btn-save-f').classList.replace('btn-warning','btn-dark'); document.getElementById('formBiblio').reset(); document.getElementById('adm-b-uid').value = ""; document.getElementById('btn-save-b').innerText="Ajouter"; document.getElementById('btn-save-b').classList.replace('btn-warning','btn-dark'); }
+        
+        window.sauvegarderFournisseur = async function(e) { e.preventDefault(); const uid = document.getElementById('adm-f-uid').value; const d = { nom: document.getElementById('adm-f-nom').value, categorie: document.getElementById('adm-f-cat').value, desc: document.getElementById('adm-f-desc').value, produit: document.getElementById('adm-f-prod').value, lien: document.getElementById('adm-f-lien').value }; try { if(uid) await updateDoc(doc(db, "fournisseurs", uid), d); else await addDoc(collection(db, "fournisseurs"), d); resetAdminForms(); loadFournisseurs(true); changerOnglet('annuaire'); Swal.fire("Succès", "", "success"); } catch(e){Swal.fire("Erreur",e.message,"error");} }
+        window.sauvegarderFichier = async function(e) { e.preventDefault(); const uid = document.getElementById('adm-b-uid').value; const d = { nom: document.getElementById('adm-b-nom').value, logiciel: document.getElementById('adm-b-log').value, type: document.getElementById('adm-b-type').value, categorie: document.getElementById('adm-b-cat').value, desc: document.getElementById('adm-b-desc').value, lien: document.getElementById('adm-b-lien').value, lien3d: document.getElementById('adm-b-visu').value, prix: Number(document.getElementById('adm-b-prix').value) }; try { if(uid) await updateDoc(doc(db, "bibliotheque", uid), d); else await addDoc(collection(db, "bibliotheque"), d); resetAdminForms(); loadBibliotheque(true); changerOnglet('biblio'); Swal.fire("Succès", "", "success"); } catch(e){Swal.fire("Erreur",e.message,"error");} }
+
+        async function loadFournisseurs(force=false) { if(!force && fournisseursData.length>0) return; const s = await getDocs(collection(db, "fournisseurs")); fournisseursData=[]; s.forEach(d=>fournisseursData.push({...d.data(), docId:d.id})); document.getElementById('loader-annuaire').style.display='none'; document.getElementById('table-annuaire-wrap').style.display='table'; renderFournisseurs(fournisseursData); }
+        function renderFournisseurs(data) { const b = document.getElementById("tableBody"); b.innerHTML=""; document.getElementById("stat-f-total").innerText=data.length; document.getElementById("stat-f-cat").innerText=[...new Set(data.map(i=>i.categorie))].length; const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL; if(data.length===0) b.innerHTML="<tr><td colspan='6' class='text-center p-4 text-muted'>Aucun résultat.</td></tr>"; data.forEach(i => { let badge='badge-gray'; if(i.categorie==='Quincaillerie') badge='badge-purple'; else if(i.categorie==='Bois') badge='badge-orange'; else if(i.categorie==='Isolation') badge='badge-green'; else if(['Électricité','Métal'].includes(i.categorie)) badge='badge-blue'; let btns = isAdmin ? `<button class="btn btn-sm btn-edit" onclick="editerFournisseur('${i.docId}')"><i class="bi bi-pencil-fill"></i></button><button class="btn btn-sm btn-delete" onclick="supprimerItem('fournisseurs', '${i.docId}')"><i class="bi bi-trash-fill"></i></button>` : ''; let starClass = userFavorites.has(i.docId) ? "bi-star-fill text-warning" : "bi-star"; let starBtn = currentUser ? `<i class="bi ${starClass} btn-fav" id="fav-btn-${i.docId}" onclick="toggleFavorite('fournisseurs', '${i.docId}')"></i>` : ''; b.innerHTML+=`<tr class="table-row-hover"><td class="ps-4 d-flex align-items-center">${starBtn}<span class="fw-bold text-dark">${i.nom||""}</span></td><td><span class="badge badge-soft ${badge}">${i.categorie||""}</span></td><td class="text-muted small">${i.desc||""}</td><td>${i.produit||""}</td><td class="text-end pe-4 admin-actions">${btns}<a href="${i.lien}" target="_blank" class="btn btn-visit btn-sm">Visiter</a></td></tr>`; }); }
+        
+        async function loadBibliotheque(force=false) { if(!force && biblioData.length>0) return; const s = await getDocs(collection(db, "bibliotheque")); biblioData=[]; s.forEach(d=>biblioData.push({...d.data(), docId:d.id})); document.getElementById('loader-biblio').style.display='none'; document.getElementById('table-biblio-wrap').style.display='table'; renderBibliotheque(biblioData); }
+        function renderBibliotheque(data) { const b = document.getElementById("biblioBody"); b.innerHTML=""; document.getElementById("stat-b-total").innerText=data.length; const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL; if(data.length===0) b.innerHTML="<tr><td colspan='6' class='text-center p-4 text-muted'>Aucun fichier.</td></tr>"; data.forEach(i => { let log='background:#eee; color:#333;'; if(i.logiciel==='SolidWorks') log='background:#FFFBEB; color:#B45309; border:1px solid #FEF3C7;'; if(i.logiciel==='SketchUp') log='background:#EFF6FF; color:#1D4ED8; border:1px solid #DBEAFE;'; let btns = isAdmin ? `<button class="btn btn-sm btn-edit" onclick="editerBiblio('${i.docId}')"><i class="bi bi-pencil-fill"></i></button><button class="btn btn-sm btn-delete" onclick="supprimerItem('bibliotheque', '${i.docId}')"><i class="bi bi-trash-fill"></i></button>` : ''; let dl = i.prix===0 ? `<a href="${i.lien||'#'}" target="_blank" class="btn btn-sm btn-warning text-white fw-bold"><i class="bi bi-download"></i></a>` : `<button class="btn btn-sm btn-dark fw-bold">${i.prix} €</button>`; let starClass = userFavorites.has(i.docId) ? "bi-star-fill text-warning" : "bi-star"; let starBtn = currentUser ? `<i class="bi ${starClass} btn-fav" id="fav-btn-${i.docId}" onclick="toggleFavorite('biblio', '${i.docId}')"></i>` : ''; 
+        let visuBtn = i.lien3d ? `<button onclick="open3DViewer('${i.lien3d}')" class="btn btn-sm btn-info text-white me-2"><i class="bi bi-box"></i></button>` : '';
+        b.innerHTML+=`<tr class="table-row-hover"><td class="ps-4 d-flex align-items-center">${starBtn}<span class="fw-bold text-dark">${i.nom||""}</span></td><td><span class="badge" style="${log}">${i.logiciel}</span></td><td class="text-muted small">${i.desc||""}</td><td>${i.categorie||""}</td><td class="text-end pe-4 admin-actions">${btns}${visuBtn}${dl}</td></tr>`; }); }
+
+        const fa = () => { const s=document.getElementById("searchInput").value.toLowerCase(), t=document.getElementById("typeFilter").value; let f = fournisseursData.filter(i=>(i.nom||"").toLowerCase().includes(s) && (t===""||i.categorie===t)); f.sort((a,b)=>{ let va=(a[triState.col]||"").toLowerCase(), vb=(b[triState.col]||"").toLowerCase(); if(va<vb)return -1*triState.sens; if(va>vb)return 1*triState.sens; return 0; }); renderFournisseurs(f); };
+        document.getElementById("searchInput").addEventListener("keyup", fa); document.getElementById("typeFilter").addEventListener("change", fa);
+        const fb = () => { const s=document.getElementById("searchBiblio").value.toLowerCase(), l=document.getElementById("filterLogiciel").value; renderBibliotheque(biblioData.filter(i=>(i.nom||"").toLowerCase().includes(s) && (l===""||i.logiciel===l))); };
+        document.getElementById("searchBiblio").addEventListener("keyup", fb); document.getElementById("filterLogiciel").addEventListener("change", fb);
+        
+        loadFournisseurs();
+    </script>
+</body>
+</html>
