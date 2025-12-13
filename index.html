@@ -11,19 +11,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.css">
-    <link rel="manifest" href="manifest.json">
-        <meta name="theme-color" content="#0f172a">
-        <link rel="apple-touch-icon" href="logo.png">
-
-        <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js');
-        }
-        </script>
-
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3444819884847108" crossorigin="anonymous"></script>
-
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
+    <meta name="theme-color" content="#0f172a">
+    <link rel="manifest" href="manifest.json">
 
     <style>
         :root { --primary: #0f172a; --accent: #F97316; --bg-light: #F8FAFC; --text-dark: #334155; }
@@ -36,45 +30,56 @@
         .nav-link:hover, .nav-link.active { color: white !important; }
         .nav-link.active::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: var(--accent); }
 
-        /* UI */
+        /* UI GÉNÉRAL */
         .card-custom { border: none; border-radius: 16px; background: white; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 24px; }
         .form-control-custom, .form-select-custom { border-radius: 10px; padding: 12px; border: 1px solid #e2e8f0; }
+        .result-box { background: #f1f5f9; padding: 15px; border-radius: 8px; text-align: center; margin-top: 15px; font-weight: bold; color: var(--primary); }
         
         /* TABLEAU */
         .table-custom th { background-color: var(--primary); color: white; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; padding: 16px; border-bottom: 1px solid #e2e8f0; }
         .table-custom td { vertical-align: middle; padding: 16px; background: white; border-bottom: 1px solid #f1f5f9; }
         .table-row-hover:hover td { background-color: #fff7ed; }
-        
         .clickable-header { cursor: pointer; transition: background 0.2s; }
         .clickable-header:hover { background-color: #1e293b !important; }
-        .clickable-header i { margin-left: 5px; opacity: 0.7; }
 
-        /* FAVORIS */
+        /* FAVORIS & BADGES */
         .btn-fav { cursor: pointer; color: #cbd5e1; transition: transform 0.2s, color 0.2s; font-size: 1.2rem; margin-right: 10px; }
         .btn-fav:hover { transform: scale(1.2); color: #fbbf24; }
         .btn-fav.active { color: #fbbf24; }
-
         .badge-soft { padding: 6px 12px; border-radius: 99px; font-size: 0.75em; font-weight: 600; }
         .badge-purple { background: #F3E8FF; color: #7E22CE; } .badge-blue { background: #E0F2FE; color: #0369A1; }
         .badge-orange { background: #FFEDD5; color: #C2410C; } .badge-green { background: #DCFCE7; color: #15803D; }
         .badge-gray { background: #F1F5F9; color: #475569; }
-
         .btn-visit { background-color: var(--accent); color: white; border: none; border-radius: 8px; padding: 8px 16px; font-weight: 600; transition: all 0.2s; }
         .btn-visit:hover { background-color: #ea580c; color: white; transform: translateY(-1px); }
 
-        /* PUBS */
+        /* MODEL VIEWER */
+        model-viewer { width: 100%; height: 400px; background-color: #f8fafc; border-radius: 8px; }
+
+        /* PIED DE PAGE */
+        .footer { margin-top: auto; background: white; border-top: 1px solid #e2e8f0; padding: 30px 0; text-align: center; color: #64748b; font-size: 0.9rem; }
+        .fade-in { animation: fadeIn 0.4s ease; } 
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .loading-spinner { width: 3rem; height: 3rem; border: 4px solid #f3f3f3; border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 50px auto; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* PUBS (Responsive) */
         .ad-sidebar { position: fixed; top: 50%; transform: translateY(-50%); width: 160px; height: 600px; background: white; border: 1px dashed #cbd5e1; display: none; z-index: 1000; text-align: center; padding: 0; overflow: hidden; }
         .ad-sidebar.left { left: 20px; } .ad-sidebar.right { right: 20px; }
         @media (max-width: 1200px) { .ad-sidebar { display: none !important; } }
         @media (min-width: 1200px) { .container { max-width: calc(100vw - 420px) !important; } }
 
-        .footer { margin-top: auto; background: white; border-top: 1px solid #e2e8f0; padding: 30px 0; text-align: center; color: #64748b; font-size: 0.9rem; }
-        .fade-in { animation: fadeIn 0.4s ease; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .loading-spinner { width: 3rem; height: 3rem; border: 4px solid #f3f3f3; border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 50px auto; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        
-        .result-box { background: #f1f5f9; padding: 15px; border-radius: 8px; text-align: center; margin-top: 15px; font-weight: bold; color: var(--primary); }
-        model-viewer { width: 100%; height: 400px; background-color: #f8fafc; border-radius: 8px; }
+        /* --- CSS IMPRESSION --- */
+        @media print {
+            body * { visibility: hidden; }
+            #section-outils, #section-outils * { visibility: visible; }
+            #section-outils { position: absolute; left: 0; top: 0; width: 100%; }
+            .navbar-custom, .footer, .ad-sidebar, .card-custom:not(.border-dark), .alert { display: none !important; }
+            .card-custom.border-dark { position: absolute; top: 0; left: 0; width: 100%; border: none !important; box-shadow: none; }
+            #tableau-projet { width: 100%; border-collapse: collapse; }
+            #tableau-projet th, #tableau-projet td { border: 1px solid #000; padding: 8px; }
+            .btn { display: none !important; }
+        }
     </style>
 </head>
 <body>
@@ -94,16 +99,8 @@
         </div>
     </div>
 
-    <div id="ad-left" class="ad-sidebar left">
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3444819884847108" crossorigin="anonymous"></script>
-        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-3444819884847108" data-ad-slot="6690962979"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-    <div id="ad-right" class="ad-sidebar right">
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3444819884847108" crossorigin="anonymous"></script>
-        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-3444819884847108" data-ad-slot="6690962979"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
+    <div id="ad-left" class="ad-sidebar left"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3444819884847108" crossorigin="anonymous"></script><ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-3444819884847108" data-ad-slot="6690962979"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>
+    <div id="ad-right" class="ad-sidebar right"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3444819884847108" crossorigin="anonymous"></script><ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-3444819884847108" data-ad-slot="6690962979"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>
 
     <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
         <div class="container">
@@ -166,11 +163,11 @@
                 <p class="text-muted">Calculatrices rapides.</p>
                 <div class="alert alert-warning py-2" style="font-size: 0.8rem;">
                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    <strong>Attention :</strong> Ces outils sont fournis à titre indicatif. Vérifiez toujours vos calculs. L'auteur décline toute responsabilité en cas d'erreur.
+                    <strong>Attention :</strong> Ces outils sont fournis à titre indicatif. Vérifiez toujours vos calculs.
                 </div>
             </div>
             
-            <div class="row">
+            <div class="row g-4">
                 <div class="col-md-4">
                     <div class="card-custom h-100">
                         <div class="d-flex align-items-center mb-3"><div class="rounded-circle bg-light p-3 me-3 text-primary"><i class="bi bi-calculator fs-4"></i></div><h5 class="fw-bold m-0">Poids Panneau</h5></div>
@@ -195,6 +192,110 @@
                         <div class="mb-3"><label class="small text-muted">Millimètres</label><input type="number" id="conv-mm" class="form-control" placeholder="25.4" oninput="convMmToInch()"></div>
                     </div>
                 </div>
+
+                <div class="col-md-6">
+                    <div class="card-custom h-100" id="card-Escalier">
+                        <div class="d-flex align-items-center mb-3"><div class="rounded-circle bg-light p-3 me-3 text-danger"><i class="bi bi-layers-half fs-4"></i></div><div><h5 class="fw-bold m-0">Escalier Expert</h5><small class="text-muted" style="font-size: 0.7rem;">Blondel Auto + Limons + Trémie</small></div></div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-6"><label class="small text-muted">Forme</label><select id="esc-type" class="form-select form-select-sm" onchange="updateEscLabel(); calcEscalier()"><option value="droit">Droit</option><option value="L">1/4 Tournant</option></select></div>
+                            <div class="col-6"><label class="small text-muted">Largeur (mm)</label><input type="number" id="esc-largeur" class="form-control form-control-sm" placeholder="Ex: 900" oninput="calcEscalier()"></div>
+                        </div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-6"><label class="small text-muted">Hauteur (mm)</label><input type="number" id="esc-ht" class="form-control form-control-sm" placeholder="Sol à Sol" oninput="calcEscalier()"></div>
+                            <div class="col-6"><label class="small text-muted" id="label-rec">Recul. (mm)</label><input type="number" id="esc-rec" class="form-control form-control-sm" placeholder="Dispo max" oninput="calcEscalier()"></div>
+                        </div>
+                        <div class="mb-3">
+                            <a class="text-decoration-none small fw-bold text-primary" data-bs-toggle="collapse" href="#advancedEsc" role="button"><i class="bi bi-gear-fill me-1"></i>Trémie & Dalle</a>
+                            <div class="collapse mt-2" id="advancedEsc"><div class="card card-body p-2 bg-light border-0"><div class="row g-2"><div class="col-6"><label class="small text-muted">Trémie</label><input type="number" id="esc-tremie" class="form-control form-control-sm" placeholder="Long." oninput="calcEscalier()"></div><div class="col-6"><label class="small text-muted">Dalle</label><input type="number" id="esc-dalle" class="form-control form-control-sm" placeholder="Épais." oninput="calcEscalier()"></div></div></div></div>
+                        </div>
+                        <div class="result-box mt-auto text-start">
+                            <div id="esc-res-titre" class="fw-bold mb-1 text-center">...</div><div style="font-size: 0.8rem; line-height: 1.4;" id="esc-res-txt" class="text-center text-muted mb-2">Remplissez les dimensions.</div>
+                            <div id="esc-details" class="mt-2 pt-2 border-top" style="display:none; font-size: 0.75rem;">
+                                <div class="d-flex justify-content-between mb-1"><span>Pente :</span> <strong id="res-angle">--°</strong></div>
+                                <div class="d-flex justify-content-between mb-1"><span>Limon Intérieur :</span> <strong id="res-limon-int" class="text-primary">--</strong></div>
+                                <div class="d-flex justify-content-between"><span>Limon Extérieur :</span> <strong id="res-limon-ext" class="text-primary">--</strong></div>
+                                <div class="text-center mt-1 text-muted fst-italic" style="font-size: 0.65rem;">*Inclus marge de coupe +30cm</div>
+                            </div>
+                            <div id="esc-echappee-box" class="mt-2 pt-2 border-top" style="display:none; font-size: 0.75rem;"><div class="d-flex justify-content-between"><span>Échappée tête :</span><strong id="res-echappee-val">--</strong></div><div id="res-echappee-msg" class="text-end fst-italic"></div></div>
+                        </div>
+                        <button onclick="ajouterAuProjet('Escalier')" id="btn-add-Escalier" class="btn btn-sm btn-outline-dark w-100 mt-2"><i class="bi bi-plus-circle me-1"></i>Ajouter au projet</button>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card-custom h-100" id="card-Plafond">
+                        <div class="d-flex align-items-center mb-3"><div class="rounded-circle bg-light p-3 me-3 text-secondary"><i class="bi bi-grid-3x3 fs-4"></i></div><div><h5 class="fw-bold m-0">Faux Plafond</h5><small class="text-muted" style="font-size: 0.7rem;">Calepinage & Matériaux</small></div></div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-6"><label class="small text-muted">Long. Salle (mm)</label><input type="number" id="plaf-L" class="form-control form-control-sm" placeholder="Ex: 4500" oninput="calcPlafond()"></div>
+                            <div class="col-6"><label class="small text-muted">Larg. Salle (mm)</label><input type="number" id="plaf-l" class="form-control form-control-sm" placeholder="Ex: 3200" oninput="calcPlafond()"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="small text-muted">Format Dalle</label>
+                            <select id="plaf-type" class="form-select form-select-sm" onchange="calcPlafond()"><option value="600-600">600 x 600 mm (Standard)</option><option value="1200-600">1200 x 600 mm</option></select>
+                        </div>
+                        <div class="result-box mt-auto text-start">
+                            <div id="plaf-res-titre" class="fw-bold mb-1 text-center">...</div>
+                            <div id="plaf-calepinage" class="small border-bottom pb-2 mb-2" style="display:none;">
+                                <div class="d-flex justify-content-between"><span class="text-muted">Sens Longueur :</span><strong id="res-pose-L" class="text-end">--</strong></div>
+                                <div class="text-end fst-italic text-muted" style="font-size:0.65rem;" id="res-rive-L">Coupes : --</div>
+                                <div class="d-flex justify-content-between mt-1"><span class="text-muted">Sens Largeur :</span><strong id="res-pose-l" class="text-end">--</strong></div>
+                                <div class="text-end fst-italic text-muted" style="font-size:0.65rem;" id="res-rive-l">Coupes : --</div>
+                            </div>
+                            <div id="plaf-matos" class="row g-1 text-center" style="display:none; font-size: 0.7rem;">
+                                <div class="col-4"><div class="bg-white border rounded p-1"><strong id="qty-dalles" class="d-block text-primary">0</strong>Dalles</div></div>
+                                <div class="col-4"><div class="bg-white border rounded p-1"><strong id="qty-porteurs" class="d-block">0</strong>Porteurs</div></div>
+                                <div class="col-4"><div class="bg-white border rounded p-1"><strong id="qty-cornieres" class="d-block">0</strong>Cornières</div></div>
+                                <div class="col-6 mt-1"><div class="bg-white border rounded p-1"><strong id="qty-ent-1200" class="d-block">0</strong>Entret. 1200</div></div>
+                                <div class="col-6 mt-1"><div class="bg-white border rounded p-1"><strong id="qty-ent-600" class="d-block">0</strong>Entret. 600</div></div>
+                            </div>
+                        </div>
+                        <button onclick="ajouterAuProjet('Plafond')" id="btn-add-Plafond" class="btn btn-sm btn-outline-dark w-100 mt-2"><i class="bi bi-plus-circle me-1"></i>Ajouter au projet</button>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card-custom h-100" id="card-Carrelage">
+                        <div class="d-flex align-items-center mb-3"><div class="rounded-circle bg-light p-3 me-3 text-info"><i class="bi bi-grid-fill fs-4"></i></div><div><h5 class="fw-bold m-0">Carrelage Sol</h5><small class="text-muted" style="font-size: 0.7rem;">Calepinage & Colle Pro</small></div></div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-6"><label class="small text-muted">Long. Pièce (mm)</label><input type="number" id="carr-L" class="form-control form-control-sm" placeholder="Ex: 5000" oninput="calcCarrelage()"></div>
+                            <div class="col-6"><label class="small text-muted">Larg. Pièce (mm)</label><input type="number" id="carr-l" class="form-control form-control-sm" placeholder="Ex: 4500" oninput="calcCarrelage()"></div>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6"><label class="small text-muted">Long. Carreau (cm)</label><input type="number" id="tile-L" class="form-control form-control-sm" placeholder="Ex: 60" oninput="calcCarrelage()"></div>
+                            <div class="col-6"><label class="small text-muted">Larg. Carreau (cm)</label><input type="number" id="tile-l" class="form-control form-control-sm" placeholder="Ex: 60" oninput="calcCarrelage()"></div>
+                        </div>
+                        <div class="result-box mt-auto text-start">
+                            <div id="carr-res-titre" class="fw-bold mb-1 text-center">...</div>
+                            <div id="carr-details" class="row g-1 text-center" style="display:none; font-size: 0.7rem;">
+                                <div class="col-4"><div class="bg-white border rounded p-1 h-100 d-flex flex-column justify-content-center"><strong id="res-nb-carreaux" class="d-block text-primary fs-6">0</strong><span class="text-muted">Carreaux</span><small class="text-muted fst-italic" style="font-size:0.6rem">Grille +5%</small></div></div>
+                                <div class="col-4"><div class="bg-white border rounded p-1 h-100 d-flex flex-column justify-content-center"><strong id="res-colle" class="d-block text-danger fs-6">0</strong><span class="text-muted">kg Colle</span><small id="info-encollage" class="text-muted fst-italic" style="font-size:0.6rem">--</small></div></div>
+                                <div class="col-4"><div class="bg-white border rounded p-1 h-100 d-flex flex-column justify-content-center"><strong id="res-plinthes-ml" class="d-block text-dark fs-6">0 m</strong><span class="text-muted"><span id="res-plinthes-nb">0</span> Plinthes</span><small class="text-muted fst-italic" style="font-size:0.6rem">Marge +5%</small></div></div>
+                                <div class="col-12 mt-1"><div class="bg-light border-0 rounded p-1 text-muted fst-italic" style="font-size: 0.65rem;"><span id="res-grille-info">--</span></div></div>
+                            </div>
+                        </div>
+                        <button onclick="ajouterAuProjet('Carrelage')" id="btn-add-Carrelage" class="btn btn-sm btn-outline-dark w-100 mt-2"><i class="bi bi-plus-circle me-1"></i>Ajouter au projet</button>
+                    </div>
+                </div>
+            </div> <div class="row mt-5 pb-5">
+                <div class="col-12">
+                    <div class="card-custom border-top border-4 border-dark">
+                        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                            <div class="d-flex align-items-center flex-grow-1">
+                                <i class="bi bi-folder2-open fs-3 me-3 text-dark"></i>
+                                <div class="w-100"><label class="small text-muted mb-0">Nom du Projet / Client</label><input type="text" id="project-name" class="form-control fw-bold border-0 p-0 fs-4 bg-transparent" placeholder="Mon Chantier..." oninput="saveProjectName()" style="box-shadow: none;"></div>
+                            </div>
+                            <div><button onclick="genererPDF()" class="btn btn-dark btn-sm"><i class="bi bi-file-earmark-pdf me-1"></i>Exporter PDF</button></div>
+                        </div>
+                        <div class="table-responsive mb-4">
+                            <table class="table table-hover align-middle" id="tableau-projet">
+                                <thead class="table-light"><tr><th>Lot</th><th>Zone</th><th>Détails</th><th>Matériaux</th><th class="text-end">Action</th></tr></thead>
+                                <tbody id="projet-body"></tbody>
+                            </table>
+                        </div>
+                        <div id="empty-projet-msg" class="text-center text-muted py-4">Aucun calcul enregistré.</div>
+                        <div id="zone-totaux" class="bg-light p-3 rounded border" style="display:none;"><h6 class="fw-bold text-uppercase text-muted mb-3"><i class="bi bi-calculator me-2"></i>Totaux Globaux (Approvisionnement)</h6><div class="row g-3" id="container-totaux"></div></div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -203,16 +304,8 @@
             <div class="row mb-4"><div class="col-md-3"><div class="card-custom d-flex align-items-center p-3"><div class="rounded-circle bg-light p-3 me-3 text-warning"><i class="bi bi-box-fill fs-4"></i></div><div><h3 class="m-0 fw-bold" id="stat-b-total">0</h3><small class="text-muted">Fichiers</small></div></div></div></div>
             <div id="auth-wall" class="card-custom text-center py-5 mb-4 border-0" style="background: linear-gradient(135deg, #fff 0%, #f1f5f9 100%);"><div class="mb-3"><i class="bi bi-shield-lock text-warning" style="font-size: 3.5rem;"></i></div><h3 class="fw-bold mb-3">Accès Réservé</h3><button onclick="loginWithGoogle()" class="btn btn-dark btn-lg px-5 shadow-lg rounded-pill"><i class="bi bi-google me-2"></i> Connexion</button></div>
             <div id="biblio-content" style="display: none;">
-                <div class="card-custom mb-4 p-3">
-                    <div class="row g-2">
-                        <div class="col-md-6"><div class="input-group"><span class="input-group-text bg-white border-end-0 ps-3"><i class="bi bi-search text-muted"></i></span><input type="text" id="searchBiblio" class="form-control form-control-custom border-start-0" placeholder="Rechercher..."></div></div>
-                        <div class="col-md-3"><select id="filterLogiciel" class="form-select form-select-custom"><option value="">Tous logiciels</option><option value="SolidWorks">SolidWorks</option><option value="SketchUp">SketchUp</option><option value="AutoCAD">AutoCAD</option></select></div>
-                    </div>
-                </div>
-                <div class="card-custom p-0 overflow-hidden">
-                    <div id="loader-biblio" class="text-center py-5"><div class="loading-spinner"></div><p class="text-muted">Chargement...</p></div>
-                    <div class="table-responsive"><table class="table table-custom table-hover m-0" id="table-biblio-wrap" style="display:none;"><thead><tr><th class="ps-4">Nom</th><th>Logiciel</th><th>Description</th><th>Catégorie</th><th class="text-end pe-4">Action</th></tr></thead><tbody id="biblioBody"></tbody></table></div>
-                </div>
+                <div class="card-custom mb-4 p-3"><div class="row g-2"><div class="col-md-6"><div class="input-group"><span class="input-group-text bg-white border-end-0 ps-3"><i class="bi bi-search text-muted"></i></span><input type="text" id="searchBiblio" class="form-control form-control-custom border-start-0" placeholder="Rechercher..."></div></div><div class="col-md-3"><select id="filterLogiciel" class="form-select form-select-custom"><option value="">Tous logiciels</option><option value="SolidWorks">SolidWorks</option><option value="SketchUp">SketchUp</option><option value="AutoCAD">AutoCAD</option></select></div></div></div>
+                <div class="card-custom p-0 overflow-hidden"><div id="loader-biblio" class="text-center py-5"><div class="loading-spinner"></div><p class="text-muted">Chargement...</p></div><div class="table-responsive"><table class="table table-custom table-hover m-0" id="table-biblio-wrap" style="display:none;"><thead><tr><th class="ps-4">Nom</th><th>Logiciel</th><th>Description</th><th>Catégorie</th><th class="text-end pe-4">Action</th></tr></thead><tbody id="biblioBody"></tbody></table></div></div>
             </div>
         </div>
 
@@ -224,73 +317,355 @@
         <div id="section-admin" class="fade-in" style="display: none;">
             <div class="d-flex justify-content-between align-items-center mb-4"><h2 class="fw-bold text-danger">Administration</h2><button onclick="resetAdminForms()" class="btn btn-outline-secondary btn-sm">Reset</button></div>
             <div class="row">
-                <div class="col-md-6">
-                    <div class="card-custom border-top border-4 border-danger">
-                        <h5 class="fw-bold mb-3">Fournisseurs</h5>
-                        <form id="formFournisseur" onsubmit="sauvegarderFournisseur(event)">
-                            <input type="hidden" id="adm-f-uid"><div class="mb-2"><input type="text" id="adm-f-nom" class="form-control" placeholder="Nom" required></div><div class="mb-2"><select id="adm-f-cat" class="form-select"><option value="Quincaillerie">Quincaillerie</option><option value="Bois">Bois</option><option value="Électricité">Électricité</option><option value="Isolation">Isolation</option><option value="Métal">Métal</option><option value="Carrelage">Carrelage</option></select></div><div class="mb-2"><input type="text" id="adm-f-desc" class="form-control" placeholder="Description"></div><div class="mb-2"><input type="text" id="adm-f-prod" class="form-control" placeholder="Produit"></div><div class="mb-3"><input type="url" id="adm-f-lien" class="form-control" placeholder="Lien" required></div><button type="submit" id="btn-save-f" class="btn btn-dark w-100">Enregistrer</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card-custom border-top border-4 border-primary">
-                        <h5 class="fw-bold mb-3">Bibliothèque</h5>
-                        <form id="formBiblio" onsubmit="sauvegarderFichier(event)">
-                            <input type="hidden" id="adm-b-uid">
-                            <div class="mb-2"><input type="text" id="adm-b-nom" class="form-control" placeholder="Nom" required></div>
-                            <div class="row g-2 mb-2"><div class="col"><select id="adm-b-log" class="form-select"><option value="SolidWorks">SolidWorks</option><option value="SketchUp">SketchUp</option><option value="AutoCAD">AutoCAD</option></select></div><div class="col"><input type="text" id="adm-b-type" class="form-control" placeholder="Ext"></div></div>
-                            <div class="mb-2"><input type="text" id="adm-b-cat" class="form-control" placeholder="Catégorie"></div>
-                            <div class="mb-2"><input type="text" id="adm-b-desc" class="form-control" placeholder="Desc"></div>
-                            <div class="mb-2"><input type="url" id="adm-b-lien" class="form-control" placeholder="Lien DL" required></div>
-                            <div class="mb-2"><input type="url" id="adm-b-visu" class="form-control" placeholder="Lien Visu 3D (.glb)"></div>
-                            <div class="mb-3"><input type="number" id="adm-b-prix" class="form-control" placeholder="Prix" value="0"></div>
-                            <button type="submit" id="btn-save-b" class="btn btn-dark w-100">Enregistrer</button>
-                        </form>
-                    </div>
-                </div>
+                <div class="col-md-6"><div class="card-custom border-top border-4 border-danger"><h5 class="fw-bold mb-3">Fournisseurs</h5><form id="formFournisseur" onsubmit="sauvegarderFournisseur(event)"><input type="hidden" id="adm-f-uid"><div class="mb-2"><input type="text" id="adm-f-nom" class="form-control" placeholder="Nom" required></div><div class="mb-2"><select id="adm-f-cat" class="form-select"><option value="Quincaillerie">Quincaillerie</option><option value="Bois">Bois</option><option value="Électricité">Électricité</option><option value="Isolation">Isolation</option><option value="Métal">Métal</option><option value="Carrelage">Carrelage</option></select></div><div class="mb-2"><input type="text" id="adm-f-desc" class="form-control" placeholder="Description"></div><div class="mb-2"><input type="text" id="adm-f-prod" class="form-control" placeholder="Produit"></div><div class="mb-3"><input type="url" id="adm-f-lien" class="form-control" placeholder="Lien" required></div><button type="submit" id="btn-save-f" class="btn btn-dark w-100">Enregistrer</button></form></div></div>
+                <div class="col-md-6"><div class="card-custom border-top border-4 border-primary"><h5 class="fw-bold mb-3">Bibliothèque</h5><form id="formBiblio" onsubmit="sauvegarderFichier(event)"><input type="hidden" id="adm-b-uid"><div class="mb-2"><input type="text" id="adm-b-nom" class="form-control" placeholder="Nom" required></div><div class="row g-2 mb-2"><div class="col"><select id="adm-b-log" class="form-select"><option value="SolidWorks">SolidWorks</option><option value="SketchUp">SketchUp</option><option value="AutoCAD">AutoCAD</option></select></div><div class="col"><input type="text" id="adm-b-type" class="form-control" placeholder="Ext"></div></div><div class="mb-2"><input type="text" id="adm-b-cat" class="form-control" placeholder="Catégorie"></div><div class="mb-2"><input type="text" id="adm-b-desc" class="form-control" placeholder="Desc"></div><div class="mb-2"><input type="url" id="adm-b-lien" class="form-control" placeholder="Lien DL" required></div><div class="mb-2"><input type="url" id="adm-b-visu" class="form-control" placeholder="Lien Visu 3D (.glb)"></div><div class="mb-3"><input type="number" id="adm-b-prix" class="form-control" placeholder="Prix" value="0"></div><button type="submit" id="btn-save-b" class="btn btn-dark w-100">Enregistrer</button></form></div></div>
             </div>
         </div>
-    </div>
 
-    <footer class="footer mt-auto py-4 bg-white border-top">
-        <div class="container text-center">
-            <p class="m-0 fw-bold mb-2">ProRessources &copy; 2025</p>
-            <div class="small text-muted">
-                <a href="#" onclick="Swal.fire({title: 'Mentions Légales', html: '<div class=\'text-start\'><b>Éditeur :</b> Site personnel à but non commercial.<br><br><b>Hébergement :</b><br>GitHub Inc.<br>88 Colin P Kelly Jr St<br>San Francisco, CA 94107<br>United States<br><br><b>Propriété :</b><br>Le code source et le concept sont protégés par une licence propriétaire.</div>', icon: 'info'})" class="text-decoration-none text-muted me-3">Mentions Légales</a>
-                
-                <a href="#" onclick="Swal.fire({title: 'Confidentialité & RGPD', html: '<div class=\'text-start\'><b>Cookies :</b> Ce site utilise des cookies Google AdSense pour la publicité et Firebase pour l\'authentification.<br><br><b>Données :</b> Vos favoris sont stockés de manière sécurisée sur les serveurs de Google (Firebase).<br><br><b>Vos droits :</b> Vous pouvez demander la suppression de vos données à tout moment.', icon: 'info'})" class="text-decoration-none text-muted me-3">Confidentialité</a>
-                
-                <span class="text-muted">V 3.0</span>
-            </div>
-        </div>
+    </div> <footer class="footer mt-auto py-4 bg-white border-top">
+        <div class="container text-center"><p class="m-0 fw-bold mb-2">ProRessources &copy; 2025</p></div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
     
     <script>
-        function calcPoids() {
-            const L = (parseFloat(document.getElementById('calc-L').value) || 0) / 1000;
-            const l = (parseFloat(document.getElementById('calc-l').value) || 0) / 1000;
-            const ep = (parseFloat(document.getElementById('calc-ep').value) || 0) / 1000;
-            const mat = parseFloat(document.getElementById('calc-mat').value) || 750;
-            document.getElementById('res-poids').innerText = (L * l * ep * mat).toFixed(2);
+        console.log("App started");
+
+        // --- CALCULS ---
+        function calcPoids() { const L = (parseFloat(document.getElementById('calc-L').value)||0)/1000, l = (parseFloat(document.getElementById('calc-l').value)||0)/1000, ep = (parseFloat(document.getElementById('calc-ep').value)||0)/1000, mat = parseFloat(document.getElementById('calc-mat').value)||750; document.getElementById('res-poids').innerText = (L*l*ep*mat).toFixed(2); }
+        function calcSurf() { const L = parseFloat(document.getElementById('surf-L').value)||0, H = parseFloat(document.getElementById('surf-H').value)||0, d = parseFloat(document.getElementById('surf-deduct').value)||0; document.getElementById('res-surf').innerText = Math.max(0, (L*H)-d).toFixed(2); }
+        function convInchToMm() { document.getElementById('conv-mm').value = (parseFloat(document.getElementById('conv-inch').value)*25.4).toFixed(2); }
+        function convMmToInch() { document.getElementById('conv-inch').value = (parseFloat(document.getElementById('conv-mm').value)/25.4).toFixed(3); }
+
+        function calcEscalier() {
+            const ht=parseFloat(document.getElementById('esc-ht').value), type=document.getElementById('esc-type').value, large=parseFloat(document.getElementById('esc-largeur').value);
+            let rec=parseFloat(document.getElementById('esc-rec').value), tr=parseFloat(document.getElementById('esc-tremie').value)||0, ep=parseFloat(document.getElementById('esc-dalle').value)||0;
+            const box=document.querySelector('#esc-ht').closest('.card-custom').querySelector('.result-box');
+            if(!ht){document.getElementById('esc-res-titre').innerHTML="..."; box.style.borderLeft="none"; document.getElementById('esc-details').style.display="none"; return;}
+            let nb=Math.max(2, Math.round(ht/175)); let h=ht/nb, g = (rec>0)? rec/(nb-1) : 630-(2*h); if(!rec) rec=g*(nb-1);
+            let pas=(2*h)+g, status="success"; if(pas<570 || pas>670) status="danger"; else if(pas<600 || pas>650) status="warning";
+            document.getElementById('esc-details').style.display="block";
+            document.getElementById('res-angle').innerText = (Math.atan(h/g)*(180/Math.PI)).toFixed(1)+"°";
+            let sol=rec, solExt = (type==='L' && large>0) ? sol+(large*0.785) : sol;
+            let limInt=Math.sqrt(Math.pow(ht,2)+Math.pow(sol,2)), limExt=Math.sqrt(Math.pow(ht,2)+Math.pow(solExt,2));
+            document.getElementById('res-limon-int').innerText = ((limInt+300)/1000).toFixed(2)+" m";
+            document.getElementById('res-limon-ext').innerText = ((limExt+300)/1000).toFixed(2)+" m";
+            if(tr>0 && ep>0) { document.getElementById('esc-echappee-box').style.display="block"; let dist=sol-tr, ech=(dist<0)?9999 : ht-(Math.ceil(dist/g)*h)-ep; document.getElementById('res-echappee-val').innerText = (ech>2500)?"∞":(ech/1000).toFixed(2)+" m"; } else document.getElementById('esc-echappee-box').style.display="none";
+            document.getElementById('esc-res-titre').innerHTML = `${nb} hauteurs / ${nb-1} marches`; document.getElementById('esc-res-txt').innerHTML = `h: ${h.toFixed(1)} | g: ${g.toFixed(1)}`; box.style.borderLeft = `5px solid ${status==='success'?'#198754':(status==='warning'?'#ffc107':'#dc3545')}`;
         }
-        function calcSurf() {
-            const L = parseFloat(document.getElementById('surf-L').value) || 0;
-            const H = parseFloat(document.getElementById('surf-H').value) || 0;
-            const deduct = parseFloat(document.getElementById('surf-deduct').value) || 0;
-            let surf = (L * H) - deduct; if(surf < 0) surf = 0;
-            document.getElementById('res-surf').innerText = surf.toFixed(2);
+
+        function calcPlafond() {
+            const L=parseFloat(document.getElementById('plaf-L').value), l=parseFloat(document.getElementById('plaf-l').value), type=document.getElementById('plaf-type').value;
+            const box=document.querySelector('#plaf-L').closest('.card-custom').querySelector('.result-box');
+            if(!L || !l){document.getElementById('plaf-res-titre').innerHTML="..."; box.style.borderLeft="none"; document.getElementById('plaf-matos').style.display="none"; return;}
+            let dL=(type==="1200-600")?1200:600, dl=600; let nbL=Math.ceil(L/dL), nbl=Math.ceil(l/dl);
+            document.getElementById('plaf-res-titre').innerText = ((L*l)/1000000).toFixed(2)+" m²";
+            box.style.borderLeft="5px solid #0d6efd"; document.getElementById('plaf-matos').style.display="flex";
+            document.getElementById('qty-dalles').innerText = nbL*nbl;
+            document.getElementById('qty-porteurs').innerText = Math.ceil((Math.ceil((Math.min(L,l)/1000)/1.2)*Math.max(L,l)/1000)/3.6);
+            document.getElementById('qty-cornieres').innerText = Math.ceil(((L+l)*2/1000)/3);
+            document.getElementById('qty-ent-1200').innerText = Math.ceil(((L*l/1000000)*1.7)/1.2);
+            document.getElementById('qty-ent-600').innerText = (type==="600-600")?Math.ceil(((L*l/1000000)*0.85)/0.6):0;
         }
-        function convInchToMm() {
-            const i = parseFloat(document.getElementById('conv-inch').value);
-            document.getElementById('conv-mm').value = !isNaN(i) ? (i * 25.4).toFixed(2) : "";
+
+        function calcCarrelage() {
+            const L=parseFloat(document.getElementById('carr-L').value), l=parseFloat(document.getElementById('carr-l').value), tL=parseFloat(document.getElementById('tile-L').value), tl=parseFloat(document.getElementById('tile-l').value);
+            const box=document.querySelector('#carr-L').closest('.card-custom').querySelector('.result-box');
+            if(!L||!l||!tL||!tl){ box.style.borderLeft="none"; document.getElementById('carr-details').style.display="none"; return;}
+            let nbL=Math.ceil(L/(tL*10)), nbl=Math.ceil(l/(tl*10)); let surf=(L*l)/1000000, perim=(L+l)*2/1000;
+            let colle = Math.ceil(surf * (Math.max(tL,tl)>=40 ? 8 : 4.5) * 1.10);
+            document.getElementById('carr-res-titre').innerText = "Surface : " + surf.toFixed(2) + " m²";
+            box.style.borderLeft="5px solid #0dcaf0"; document.getElementById('carr-details').style.display="flex";
+            document.getElementById('res-nb-carreaux').innerText = Math.ceil((nbL*nbl)*1.05);
+            document.getElementById('res-grille-info').innerText = `Grille: ${nbL} x ${nbl}`;
+            document.getElementById('res-colle').innerText = colle;
+            document.getElementById('res-plinthes-nb').innerText = Math.ceil((Math.ceil(perim/(Math.max(tL,tl)/100)))*1.05);
+            document.getElementById('res-plinthes-ml').innerText = perim.toFixed(2)+" m";
         }
-        function convMmToInch() {
-            const m = parseFloat(document.getElementById('conv-mm').value);
-            document.getElementById('conv-inch').value = !isNaN(m) ? (m / 25.4).toFixed(3) : "";
+
+        // --- GESTION PROJET & PDF ---
+        let monProjet = JSON.parse(localStorage.getItem('monProjet')) || [];
+        let editModeId = null;
+        document.getElementById('project-name').value = localStorage.getItem('nomProjet') || "";
+        updateProjetTable();
+
+        function saveProjectName() { localStorage.setItem('nomProjet', document.getElementById('project-name').value); }
+
+        function ajouterAuProjet(outil) {
+            Swal.fire({
+                title: editModeId ? 'Modifier la zone ?' : 'Nom de la zone ?',
+                input: 'text', inputValue: editModeId ? monProjet.find(i => i.id === editModeId).zone : '', showCancelButton: true, confirmButtonText: editModeId ? 'Mettre à jour' : 'Ajouter'
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    const zone = result.value; let details="", rawData={}, inputData={};
+                    if (outil === 'Escalier') {
+                        inputData = { type: document.getElementById('esc-type').value, largeur: document.getElementById('esc-largeur').value, ht: document.getElementById('esc-ht').value, rec: document.getElementById('esc-rec').value, tremie: document.getElementById('esc-tremie').value, dalle: document.getElementById('esc-dalle').value };
+                        details = `${inputData.type} | H: ${inputData.ht}mm`; rawData = { type: 'Escalier' }; 
+                    } else if (outil === 'Plafond') {
+                        inputData = { L: document.getElementById('plaf-L').value, l: document.getElementById('plaf-l').value, type: document.getElementById('plaf-type').value };
+                        details = `Surf: ${document.getElementById('plaf-res-titre').innerText} | ${inputData.type}`;
+                        rawData = { type: 'Plafond', dalles: parseInt(document.getElementById('qty-dalles').innerText), porteurs: parseInt(document.getElementById('qty-porteurs').innerText), cornieres: parseInt(document.getElementById('qty-cornieres').innerText), ent1200: parseInt(document.getElementById('qty-ent-1200').innerText), ent600: parseInt(document.getElementById('qty-ent-600').innerText) };
+                    } else if (outil === 'Carrelage') {
+                        inputData = { L: document.getElementById('carr-L').value, l: document.getElementById('carr-l').value, tileL: document.getElementById('tile-L').value, tilel: document.getElementById('tile-l').value };
+                        details = `Surf: ${document.getElementById('carr-res-titre').innerText.replace('Surface : ','')} | ${inputData.tileL}x${inputData.tilel}`;
+                        rawData = { type: 'Carrelage', carreaux: parseInt(document.getElementById('res-nb-carreaux').innerText), colle: parseInt(document.getElementById('res-colle').innerText), plinthes: parseInt(document.getElementById('res-plinthes-nb').innerText) };
+                    }
+                    if (editModeId) {
+                        const index = monProjet.findIndex(i => i.id === editModeId);
+                        monProjet[index] = { id: editModeId, outil, zone, details, rawData, inputData }; editModeId = null;
+                        document.getElementById('btn-add-'+outil).innerHTML = '<i class="bi bi-plus-circle me-1"></i>Ajouter au projet';
+                        document.getElementById('btn-add-'+outil).classList.remove('btn-warning'); document.getElementById('btn-add-'+outil).classList.add('btn-outline-dark');
+                    } else { monProjet.push({ id: Date.now(), outil, zone, details, rawData, inputData }); }
+                    saveAndRender();
+                }
+            });
         }
+
+        function chargerPourModification(id) {
+            const item = monProjet.find(i => i.id === id); if (!item) return; editModeId = id; 
+            if (item.outil === 'Escalier') { document.getElementById('esc-type').value = item.inputData.type; document.getElementById('esc-largeur').value = item.inputData.largeur; document.getElementById('esc-ht').value = item.inputData.ht; document.getElementById('esc-rec').value = item.inputData.rec; calcEscalier(); document.getElementById('card-Escalier').scrollIntoView();
+            } else if (item.outil === 'Plafond') { document.getElementById('plaf-L').value = item.inputData.L; document.getElementById('plaf-l').value = item.inputData.l; document.getElementById('plaf-type').value = item.inputData.type; calcPlafond(); document.getElementById('card-Plafond').scrollIntoView();
+            } else if (item.outil === 'Carrelage') { document.getElementById('carr-L').value = item.inputData.L; document.getElementById('carr-l').value = item.inputData.l; document.getElementById('tile-L').value = item.inputData.tileL; document.getElementById('tile-l').value = item.inputData.tilel; calcCarrelage(); document.getElementById('card-Carrelage').scrollIntoView(); }
+            const btn = document.getElementById('btn-add-' + item.outil); btn.innerHTML = '<i class="bi bi-pencil-square me-1"></i>Mettre à jour'; btn.classList.remove('btn-outline-dark'); btn.classList.add('btn-warning');
+        }
+
+        function supprimerLigne(id) { monProjet = monProjet.filter(item => item.id !== id); if(editModeId === id) editModeId = null; saveAndRender(); }
+        function saveAndRender() { monProjet.sort((a, b) => a.outil.localeCompare(b.outil)); localStorage.setItem('monProjet', JSON.stringify(monProjet)); updateProjetTable(); calculerTotaux(); }
+
+        function updateProjetTable() {
+            const tbody = document.getElementById('projet-body'); tbody.innerHTML = "";
+            if (monProjet.length === 0) { document.getElementById('empty-projet-msg').style.display = "block"; document.getElementById('zone-totaux').style.display = "none";
+            } else {
+                document.getElementById('empty-projet-msg').style.display = "none"; document.getElementById('zone-totaux').style.display = "block";
+                monProjet.forEach((item) => {
+                    let badgeColor = 'bg-secondary'; let matTxt = "";
+                    if(item.outil === 'Escalier') badgeColor = 'bg-danger';
+                    if(item.outil === 'Plafond') { badgeColor = 'bg-primary'; matTxt = `${item.rawData.dalles} Dalles, ${item.rawData.porteurs} Porteurs`; }
+                    if(item.outil === 'Carrelage') { badgeColor = 'bg-info text-dark'; matTxt = `${item.rawData.carreaux} Carreaux, ${item.rawData.colle}kg Colle`; }
+                    let activeClass = (editModeId === item.id) ? "table-warning" : "";
+                    tbody.innerHTML += `<tr class="${activeClass}"><td><span class="badge ${badgeColor}">${item.outil}</span></td><td class="fw-bold">${item.zone}</td><td class="small text-muted">${item.details}</td><td class="small fw-bold">${matTxt}</td><td class="text-end"><button onclick="chargerPourModification(${item.id})" class="btn btn-sm text-primary me-1"><i class="bi bi-pencil-fill"></i></button><button onclick="supprimerLigne(${item.id})" class="btn btn-sm text-danger"><i class="bi bi-trash-fill"></i></button></td></tr>`;
+                });
+            }
+        }
+
+        function calculerTotaux() {
+            const container = document.getElementById('container-totaux'); container.innerHTML = "";
+            let t = { plafond: { dalles:0, porteurs:0, cornieres:0, ent1200:0, ent600:0 }, carrelage: { carreaux:0, colle:0, plinthes:0 } };
+            let hasP = false, hasC = false;
+            monProjet.forEach(item => {
+                if (item.outil === 'Plafond') { hasP=true; t.plafond.dalles+=item.rawData.dalles; t.plafond.porteurs+=item.rawData.porteurs; t.plafond.cornieres+=item.rawData.cornieres; t.plafond.ent1200+=item.rawData.ent1200; t.plafond.ent600+=item.rawData.ent600; }
+                else if (item.outil === 'Carrelage') { hasC=true; t.carrelage.carreaux+=item.rawData.carreaux; t.carrelage.colle+=item.rawData.colle; t.carrelage.plinthes+=item.rawData.plinthes; }
+            });
+            if(hasC) container.innerHTML += `<div class="col-md-6"><div class="p-2 border rounded bg-white h-100 border-start border-4 border-info"><strong class="d-block text-info mb-1">TOTAL CARRELAGE</strong><ul class="list-unstyled small m-0"><li>• ${t.carrelage.carreaux} Carreaux</li><li>• ${t.carrelage.colle} kg Colle</li><li>• ${t.carrelage.plinthes} Plinthes</li></ul></div></div>`;
+            if(hasP) container.innerHTML += `<div class="col-md-6"><div class="p-2 border rounded bg-white h-100 border-start border-4 border-primary"><strong class="d-block text-primary mb-1">TOTAL PLAFOND</strong><ul class="list-unstyled small m-0 row"><li class="col-6">• ${t.plafond.dalles} Dalles</li><li class="col-6">• ${t.plafond.porteurs} Porteurs</li><li class="col-6">• ${t.plafond.cornieres} Cornières</li><li class="col-6">• ${t.plafond.ent1200} Ent. 1200</li><li class="col-6">• ${t.plafond.ent600} Ent. 600</li></ul></div></div>`;
+        }
+
+        // --- GÉNÉRATION PDF (DESIGN PRO : BORDS ARRONDIS + TRAITS NOIRS) ---
+        function genererPDF() {
+            if (monProjet.length === 0) return Swal.fire("Vide", "Rien à exporter", "warning");
+
+            try {
+                const { jsPDF } = window.jspdf;
+                if (!jsPDF) throw new Error("Bibliothèque PDF non chargée.");
+                
+                const doc = new jsPDF('landscape'); 
+
+                // 1. EN-TÊTE
+                const projectName = document.getElementById('project-name').value || "Mon Chantier";
+                const date = new Date().toLocaleDateString();
+
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(10);
+                doc.setTextColor(100);
+                doc.text("Nom du Projet / Client", 14, 15);
+
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(22);
+                doc.setTextColor(33, 37, 41); 
+                doc.text(projectName, 14, 24);
+
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "normal");
+                doc.text(`Date : ${date}`, 297 - 14, 24, { align: 'right' });
+
+                // 2. PRÉPARATION DONNÉES
+                let rows = monProjet.map(item => {
+                    let mat = "";
+                    if (item.outil === 'Plafond') {
+                        mat = `${item.rawData.dalles} Dalles\n${item.rawData.porteurs} Porteurs\n${item.rawData.cornieres} Cornières\n${item.rawData.ent1200} Ent.1200 / ${item.rawData.ent600} Ent.600`;
+                    } else if (item.outil === 'Carrelage') {
+                        mat = `${item.rawData.carreaux} Carreaux\n${item.rawData.colle} kg Colle\n${item.rawData.plinthes} Plinthes`;
+                    } else {
+                        mat = item.materials || "-";
+                    }
+                    return [item.outil, item.zone, item.details, mat];
+                });
+
+                const colors = {
+                    'Carrelage': [13, 202, 240], // Cyan
+                    'Plafond': [13, 110, 253],   // Bleu
+                    'Escalier': [220, 53, 69]    // Rouge
+                };
+
+                // 3. TABLEAU (Traits Noirs & Cadre Arrondi)
+                doc.autoTable({
+                    head: [['Lot', 'Zone', 'Détails', 'Matériaux']],
+                    body: rows,
+                    startY: 35,
+                    theme: 'grid', // Grille complète
+                    
+                    // Styles globaux (Traits noirs)
+                    styles: { 
+                        font: "helvetica",
+                        fontSize: 10,
+                        cellPadding: 5, 
+                        valign: 'middle',
+                        lineColor: [0, 0, 0], // NOIR
+                        lineWidth: 0.1,       // Trait fin
+                        overflow: 'linebreak' 
+                    },
+                    
+                    // En-tête (Gris clair)
+                    headStyles: { 
+                        fillColor: [240, 240, 240], 
+                        textColor: [0, 0, 0], // Texte noir
+                        fontStyle: 'bold',
+                        lineColor: [0, 0, 0], // Bordure noire
+                        lineWidth: 0.1
+                    },
+                    
+                    // Colonnes
+                    columnStyles: {
+                        0: { cellWidth: 35, fontStyle: 'bold', textColor: [255, 255, 255] }, 
+                        1: { cellWidth: 40, fontStyle: 'bold' }, 
+                        2: { cellWidth: 90, textColor: [80, 80, 80] }, 
+                        3: { fontStyle: 'bold' } 
+                    },
+
+                    // Dessin des badges colorés
+                    willDrawCell: function (data) {
+                        if (data.section === 'body' && data.column.index === 0) {
+                            const c = colors[data.cell.raw] || [100, 100, 100];
+                            doc.setFillColor(...c);
+                            doc.roundedRect(data.cell.x + 2, data.cell.y + 2, data.cell.width - 4, data.cell.height - 4, 2, 2, 'F');
+                            doc.setTextColor(255, 255, 255);
+                            data.cell.styles.halign = 'center';
+                        }
+                    },
+
+                    // ASTUCE : Dessiner un cadre arrondi AUTOUR du tableau à la fin de chaque page
+                    didDrawPage: function (data) {
+                        const tableHeight = data.cursor.y - data.settings.startY;
+                        const tableWidth = data.table.width;
+                        
+                        // On redessine un cadre noir arrondi par dessus les bordures carrées extérieures
+                        doc.setDrawColor(0, 0, 0);
+                        doc.setLineWidth(0.3); // Un peu plus épais pour le tour
+                        doc.roundedRect(14, data.settings.startY, tableWidth, tableHeight, 3, 3);
+                    }
+                });
+
+                // 4. TOTAUX GLOBAUX (Tous les matériaux)
+                let finalY = doc.lastAutoTable.finalY + 15;
+                
+                // Calculs
+                let t = { plafond: { dalles:0, porteurs:0, cornieres:0, ent1200:0, ent600:0 }, carrelage: { carreaux:0, colle:0, plinthes:0 } };
+                let hasP=false, hasC=false;
+
+                monProjet.forEach(i => {
+                    if(i.outil==='Plafond'){
+                        hasP=true; 
+                        t.plafond.dalles+=i.rawData.dalles; 
+                        t.plafond.porteurs+=i.rawData.porteurs;
+                        t.plafond.cornieres+=i.rawData.cornieres;
+                        t.plafond.ent1200+=i.rawData.ent1200;
+                        t.plafond.ent600+=i.rawData.ent600;
+                    } 
+                    else if(i.outil==='Carrelage'){
+                        hasC=true; 
+                        t.carrelage.carreaux+=i.rawData.carreaux; 
+                        t.carrelage.colle+=i.rawData.colle; 
+                        t.carrelage.plinthes+=i.rawData.plinthes;
+                    } 
+                });
+
+                doc.setFontSize(11); doc.setTextColor(80, 80, 80); doc.setFont("helvetica", "bold");
+                if (hasP || hasC) doc.text("RÉCAPITULATIF APPROVISIONNEMENT", 14, finalY);
+                finalY += 5;
+
+                // Fonction pour dessiner une boite arrondie
+                function drawBox(x, title, c, lines) {
+                    const hBox = 25 + (lines.length * 6);
+                    // Fond blanc pour cacher les lignes si besoin
+                    doc.setFillColor(255, 255, 255);
+                    doc.roundedRect(x, finalY, 130, hBox, 3, 3, 'F');
+                    
+                    // Bordure couleur
+                    doc.setDrawColor(...c); 
+                    doc.setLineWidth(0.8); 
+                    doc.roundedRect(x, finalY, 130, hBox, 3, 3, 'S'); // S = Stroke (Contour)
+
+                    // Titre
+                    doc.setTextColor(...c); 
+                    doc.setFont("helvetica", "bold"); 
+                    doc.text(title, x+5, finalY+8);
+                    
+                    // Contenu
+                    doc.setTextColor(0, 0, 0); 
+                    doc.setFont("helvetica", "normal"); 
+                    doc.setFontSize(10);
+                    lines.forEach((l, idx) => doc.text("• "+l, x+5, finalY+16+(idx*6)));
+                }
+
+                let x=14;
+                if(hasC) { 
+                    drawBox(x, "TOTAL CARRELAGE", colors['Carrelage'], [
+                        `${t.carrelage.carreaux} Carreaux`, 
+                        `${t.carrelage.colle} kg Colle`, 
+                        `${t.carrelage.plinthes} Plinthes`
+                    ]); 
+                    x+=135; 
+                }
+                if(hasP) { 
+                    drawBox(x, "TOTAL PLAFOND", colors['Plafond'], [
+                        `${t.plafond.dalles} Dalles`, 
+                        `${t.plafond.porteurs} Porteurs`, 
+                        `${t.plafond.cornieres} Cornières`, 
+                        `${t.plafond.ent1200} Entretoises 1200`,
+                        `${t.plafond.ent600} Entretoises 600`
+                    ]); 
+                }
+
+                // 5. PIED DE PAGE (Numérotation X / Y)
+                const pC = doc.internal.getNumberOfPages();
+                for(let i=1; i<=pC; i++){
+                    doc.setPage(i);
+                    // Ligne de séparation bas
+                    doc.setDrawColor(200); 
+                    doc.setLineWidth(0.1); 
+                    doc.line(14, doc.internal.pageSize.height-15, 297-14, doc.internal.pageSize.height-15);
+                    
+                    doc.setFontSize(9); 
+                    doc.setTextColor(150); 
+                    
+                    // Copyright
+                    doc.text("ProRessources © 2025", doc.internal.pageSize.width/2, doc.internal.pageSize.height-10, {align:'center'});
+                    
+                    // Numéro de page
+                    doc.text(`Page n° ${i} / ${pC}`, 297-14, doc.internal.pageSize.height-10, {align:'right'});
+                }
+
+                doc.save(`Metre_${projectName.replace(/\s+/g,'_')}.pdf`);
+
+            } catch (e) { 
+                console.error(e); 
+                Swal.fire("Erreur PDF", "Erreur technique : " + e.message, "error"); 
+            }
+        }
+
+        function changerOnglet(o) { ['annuaire','outils','biblio','admin','favoris'].forEach(i=>{document.getElementById('section-'+i).style.display='none'; document.getElementById('btn-'+i)?.classList.remove('active');}); document.getElementById('section-'+o).style.display='block'; document.getElementById('btn-'+o)?.classList.add('active'); }
+        changerOnglet('annuaire');
     </script>
 
     <script type="module">
@@ -298,15 +673,23 @@
         import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, where, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        const firebaseConfig = { apiKey: "AIzaSyC70c8hVhGU7uFJad-Su2CMrm-TCxlbsoM", authDomain: "proressources-3dab4.firebaseapp.com", projectId: "proressources-3dab4", storageBucket: "proressources-3dab4.firebasestorage.app", messagingSenderId: "940538561110", appId: "1:940538561110:web:f8ca7e1cbc8e73b02c31f7" };
+        // REMPLACEZ ICI PAR VOS CLES FIREBASE (Celles de la console)
+        const firebaseConfig = {
+        apiKey: "AIzaSyC70c8hVhGU7uFJad-Su2CMrm-TCxlbsoM",
+        authDomain: "proressources-3dab4.firebaseapp.com",
+        projectId: "proressources-3dab4",
+        storageBucket: "proressources-3dab4.firebasestorage.app",
+        messagingSenderId: "940538561110",
+        appId: "1:940538561110:web:f8ca7e1cbc8e73b02c31f7"
+
+        };
+
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app); const provider = new GoogleAuthProvider(); const ADMIN_EMAIL = "3d.build.007@gmail.com";
         let currentUser = null, fournisseursData = [], biblioData = [], triState = { col: 'nom', sens: 1 }, userFavorites = new Set(); 
 
         window.loginWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e){ Swal.fire("Erreur", e.message, "error"); } }
         window.logout = async () => { await signOut(auth); location.reload(); }
         window.trier = function(col) { if(triState.col === col) triState.sens *= -1; else { triState.col = col; triState.sens = 1; } fa(); }
-        
-        // 3D VIEWER
         window.open3DViewer = function(url) {
             const viewer = document.getElementById('viewer3d');
             viewer.src = url;
@@ -335,7 +718,7 @@
                 const isAdmin = user.email === ADMIN_EMAIL; const isLamache = user.email.endsWith("@lamache.org");
                 if (isAdmin) { document.getElementById('nav-admin').style.display = 'block'; document.getElementById('nav-biblio-li').style.display = 'block'; toggleAds(false); }
                 else if (isLamache) { document.getElementById('nav-admin').style.display = 'none'; document.getElementById('nav-biblio-li').style.display = 'none'; toggleAds(false); }
-                else { document.getElementById('nav-admin').style.display = 'none'; document.getElementById('nav-biblio-li').style.display = 'none'; toggleAds(true); }
+                else { document.getElementById('nav-admin').style.display = 'none'; document.getElementById('nav-biblio-li').style.display = 'block'; toggleAds(true); }
                 document.getElementById('nav-favoris-li').style.display = 'block';
                 if(fournisseursData.length > 0) renderFournisseurs(fournisseursData);
             } else {
@@ -386,7 +769,4 @@
         loadFournisseurs();
     </script>
 </body>
-
 </html>
-
-
