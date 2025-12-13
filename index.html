@@ -335,7 +335,7 @@
                 const isAdmin = user.email === ADMIN_EMAIL; const isLamache = user.email.endsWith("@lamache.org");
                 if (isAdmin) { document.getElementById('nav-admin').style.display = 'block'; document.getElementById('nav-biblio-li').style.display = 'block'; toggleAds(false); }
                 else if (isLamache) { document.getElementById('nav-admin').style.display = 'none'; document.getElementById('nav-biblio-li').style.display = 'none'; toggleAds(false); }
-                else { document.getElementById('nav-admin').style.display = 'none'; document.getElementById('nav-biblio-li').style.display = 'block'; toggleAds(true); }
+                else { document.getElementById('nav-admin').style.display = 'none'; document.getElementById('nav-biblio-li').style.display = 'none'; toggleAds(true); }
                 document.getElementById('nav-favoris-li').style.display = 'block';
                 if(fournisseursData.length > 0) renderFournisseurs(fournisseursData);
             } else {
@@ -388,4 +388,5 @@
 </body>
 
 </html>
+
 
