@@ -256,8 +256,10 @@
         <div class="container text-center">
             <p class="m-0 fw-bold mb-2">ProRessources &copy; 2025</p>
             <div class="small text-muted">
-                <a href="#" onclick="Swal.fire('Mentions Légales', 'Site personnel à but non commercial.<br>Hébergement : Netlify Inc, San Francisco.<br>Contact : via le formulaire Google.', 'info')" class="text-decoration-none text-muted me-3">Mentions Légales</a>
-                <a href="#" onclick="Swal.fire('Confidentialité', 'Nous utilisons des cookies pour les préférences et la publicité (Google). Vos favoris sont stockés via Google Firebase. Vous pouvez demander la suppression de vos données sur simple demande.', 'info')" class="text-decoration-none text-muted me-3">Confidentialité (RGPD)</a>
+                <a href="#" onclick="Swal.fire({title: 'Mentions Légales', html: '<div class=\'text-start\'><b>Éditeur :</b> Site personnel à but non commercial.<br><br><b>Hébergement :</b><br>GitHub Inc.<br>88 Colin P Kelly Jr St<br>San Francisco, CA 94107<br>United States<br><br><b>Propriété :</b><br>Le code source et le concept sont protégés par une licence propriétaire.</div>', icon: 'info'})" class="text-decoration-none text-muted me-3">Mentions Légales</a>
+                
+                <a href="#" onclick="Swal.fire({title: 'Confidentialité & RGPD', html: '<div class=\'text-start\'><b>Cookies :</b> Ce site utilise des cookies Google AdSense pour la publicité et Firebase pour l\'authentification.<br><br><b>Données :</b> Vos favoris sont stockés de manière sécurisée sur les serveurs de Google (Firebase).<br><br><b>Vos droits :</b> Vous pouvez demander la suppression de vos données à tout moment.', icon: 'info'})" class="text-decoration-none text-muted me-3">Confidentialité</a>
+                
                 <span class="text-muted">V 3.0</span>
             </div>
         </div>
@@ -384,4 +386,5 @@
         loadFournisseurs();
     </script>
 </body>
+
 </html>
