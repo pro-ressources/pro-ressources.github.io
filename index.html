@@ -12,11 +12,70 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.css">
     
-    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="logo.png">
 
+    <script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js');
+    }
+    </script>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3444819884847108" crossorigin="anonymous"></script>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
-    <meta name="theme-color" content="#0f172a">
+    <style>
+        :root { --primary: #0f172a; --accent: #F97316; --bg-light: #F8FAFC; --text-dark: #334155; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-light); color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* NAVBAR */
+        .navbar-custom { background-color: var(--primary); padding: 1rem 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .navbar-brand { font-weight: 700; font-size: 1.25rem; color: white !important; }
+        .nav-link { color: #94a3b8 !important; font-weight: 500; margin: 0 10px; transition: all 0.3s; position: relative; }
+        .nav-link:hover, .nav-link.active { color: white !important; }
+        .nav-link.active::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: var(--accent); }
+
+        /* UI */
+        .card-custom { border: none; border-radius: 16px; background: white; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 24px; }
+        .form-control-custom, .form-select-custom { border-radius: 10px; padding: 12px; border: 1px solid #e2e8f0; }
+        
+        /* TABLEAU */
+        .table-custom th { background-color: var(--primary); color: white; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; padding: 16px; border-bottom: 1px solid #e2e8f0; }
+        .table-custom td { vertical-align: middle; padding: 16px; background: white; border-bottom: 1px solid #f1f5f9; }
+        .table-row-hover:hover td { background-color: #fff7ed; }
+        
+        .clickable-header { cursor: pointer; transition: background 0.2s; }
+        .clickable-header:hover { background-color: #1e293b !important; }
+        .clickable-header i { margin-left: 5px; opacity: 0.7; }
+
+        /* FAVORIS */
+        .btn-fav { cursor: pointer; color: #cbd5e1; transition: transform 0.2s, color 0.2s; font-size: 1.2rem; margin-right: 10px; }
+        .btn-fav:hover { transform: scale(1.2); color: #fbbf24; }
+        .btn-fav.active { color: #fbbf24; }
+
+        .badge-soft { padding: 6px 12px; border-radius: 99px; font-size: 0.75em; font-weight: 600; }
+        .badge-purple { background: #F3E8FF; color: #7E22CE; } .badge-blue { background: #E0F2FE; color: #0369A1; }
+        .badge-orange { background: #FFEDD5; color: #C2410C; } .badge-green { background: #DCFCE7; color: #15803D; }
+        .badge-gray { background: #F1F5F9; color: #475569; }
+
+        .btn-visit { background-color: var(--accent); color: white; border: none; border-radius: 8px; padding: 8px 16px; font-weight: 600; transition: all 0.2s; }
+        .btn-visit:hover { background-color: #ea580c; color: white; transform: translateY(-1px); }
+
+        /* PUBS */
+        .ad-sidebar { position: fixed; top: 50%; transform: translateY(-50%); width: 160px; height: 600px; background: white; border: 1px dashed #cbd5e1; display: none; z-index: 1000; text-align: center; padding: 0; overflow: hidden; }
+        .ad-sidebar.left { left: 20px; } .ad-sidebar.right { right: 20px; }
+        @media (max-width: 1200px) { .ad-sidebar { display: none !important; } }
+        @media (min-width: 1200px) { .container { max-width: calc(100vw - 420px) !important; } }
+
+        .footer { margin-top: auto; background: white; border-top: 1px solid #e2e8f0; padding: 30px 0; text-align: center; color: #64748b; font-size: 0.9rem; }
+        .fade-in { animation: fadeIn 0.4s ease; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .loading-spinner { width: 3rem; height: 3rem; border: 4px solid #f3f3f3; border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 50px auto; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        .result-box { background: #f1f5f9; padding: 15px; border-radius: 8px; text-align: center; margin-top: 15px; font-weight: bold; color: var(--primary); }
+        model-viewer { width: 100%; height: 400px; background-color: #f8fafc; border-radius: 8px; }
+    </style>
 </head>
 <body>
 
@@ -36,10 +95,14 @@
     </div>
 
     <div id="ad-left" class="ad-sidebar left">
-        <div class="p-2 text-muted small">Espace Pub</div>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3444819884847108" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-3444819884847108" data-ad-slot="6690962979"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
     <div id="ad-right" class="ad-sidebar right">
-        <div class="p-2 text-muted small">Espace Pub</div>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3444819884847108" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-3444819884847108" data-ad-slot="6690962979"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
     <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
@@ -100,7 +163,11 @@
         <div id="section-outils" class="fade-in" style="display: none;">
             <div class="mb-4">
                 <h2 class="fw-bold mb-1">Boîte à Outils</h2>
-                <div class="alert alert-warning py-2" style="font-size: 0.8rem;"><i class="bi bi-exclamation-triangle-fill me-2"></i><strong>Attention :</strong> Ces outils sont fournis à titre indicatif. Vérifiez toujours vos calculs. L'auteur décline toute résponsabilité.</div>          
+                <p class="text-muted">Calculatrices rapides.</p>
+                <div class="alert alert-warning py-2" style="font-size: 0.8rem;">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <strong>Attention :</strong> Ces outils sont fournis à titre indicatif. Vérifiez toujours vos calculs. L'auteur décline toute responsabilité en cas d'erreur.
+                </div>
             </div>
             
             <div class="row g-4">
@@ -130,53 +197,83 @@
                 </div>
 
                 <div class="col-md-6">
-                    <div class="card-custom h-100" id="card-Escalier">
-                        <div class="d-flex align-items-center mb-3"><div class="rounded-circle bg-light p-3 me-3 text-danger"><i class="bi bi-layers-half fs-4"></i></div><div><h5 class="fw-bold m-0">Escalier Expert</h5><small class="text-muted" style="font-size: 0.7rem;">Blondel Auto + Limons + Trémie</small></div></div>
+                    <div class="card-custom h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle bg-light p-3 me-3 text-danger"><i class="bi bi-layers-half fs-4"></i></div>
+                            <div><h5 class="fw-bold m-0">Escalier Expert</h5><small class="text-muted" style="font-size: 0.7rem;">Blondel Auto + Limons + Trémie</small></div>
+                        </div>
+
                         <div class="row g-2 mb-2">
                             <div class="col-6"><label class="small text-muted">Forme</label><select id="esc-type" class="form-select form-select-sm" onchange="updateEscLabel(); calcEscalier()"><option value="droit">Droit</option><option value="L">1/4 Tournant</option></select></div>
                             <div class="col-6"><label class="small text-muted">Largeur (mm)</label><input type="number" id="esc-largeur" class="form-control form-control-sm" placeholder="Ex: 900" oninput="calcEscalier()"></div>
                         </div>
+
                         <div class="row g-2 mb-2">
                             <div class="col-6"><label class="small text-muted">Hauteur (mm)</label><input type="number" id="esc-ht" class="form-control form-control-sm" placeholder="Sol à Sol" oninput="calcEscalier()"></div>
                             <div class="col-6"><label class="small text-muted" id="label-rec">Recul. (mm)</label><input type="number" id="esc-rec" class="form-control form-control-sm" placeholder="Dispo max" oninput="calcEscalier()"></div>
                         </div>
+
                         <div class="mb-3">
                             <a class="text-decoration-none small fw-bold text-primary" data-bs-toggle="collapse" href="#advancedEsc" role="button"><i class="bi bi-gear-fill me-1"></i>Trémie & Dalle</a>
-                            <div class="collapse mt-2" id="advancedEsc"><div class="card card-body p-2 bg-light border-0"><div class="row g-2"><div class="col-6"><label class="small text-muted">Trémie</label><input type="number" id="esc-tremie" class="form-control form-control-sm" placeholder="Long." oninput="calcEscalier()"></div><div class="col-6"><label class="small text-muted">Dalle</label><input type="number" id="esc-dalle" class="form-control form-control-sm" placeholder="Épais." oninput="calcEscalier()"></div></div></div></div>
+                            <div class="collapse mt-2" id="advancedEsc">
+                                <div class="card card-body p-2 bg-light border-0">
+                                    <div class="row g-2">
+                                        <div class="col-6"><label class="small text-muted">Trémie</label><input type="number" id="esc-tremie" class="form-control form-control-sm" placeholder="Long." oninput="calcEscalier()"></div>
+                                        <div class="col-6"><label class="small text-muted">Dalle</label><input type="number" id="esc-dalle" class="form-control form-control-sm" placeholder="Épais." oninput="calcEscalier()"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                         <div class="result-box mt-auto text-start">
-                            <div id="esc-res-titre" class="fw-bold mb-1 text-center">...</div><div style="font-size: 0.8rem; line-height: 1.4;" id="esc-res-txt" class="text-center text-muted mb-2">Remplissez les dimensions.</div>
+                            <div id="esc-res-titre" class="fw-bold mb-1 text-center">...</div>
+                            <div style="font-size: 0.8rem; line-height: 1.4;" id="esc-res-txt" class="text-center text-muted mb-2">Remplissez les dimensions.</div>
+                            
                             <div id="esc-details" class="mt-2 pt-2 border-top" style="display:none; font-size: 0.75rem;">
                                 <div class="d-flex justify-content-between mb-1"><span>Pente :</span> <strong id="res-angle">--°</strong></div>
                                 <div class="d-flex justify-content-between mb-1"><span>Limon Intérieur :</span> <strong id="res-limon-int" class="text-primary">--</strong></div>
                                 <div class="d-flex justify-content-between"><span>Limon Extérieur :</span> <strong id="res-limon-ext" class="text-primary">--</strong></div>
                                 <div class="text-center mt-1 text-muted fst-italic" style="font-size: 0.65rem;">*Inclus marge de coupe +30cm</div>
                             </div>
-                            <div id="esc-echappee-box" class="mt-2 pt-2 border-top" style="display:none; font-size: 0.75rem;"><div class="d-flex justify-content-between"><span>Échappée tête :</span><strong id="res-echappee-val">--</strong></div><div id="res-echappee-msg" class="text-end fst-italic"></div></div>
+
+                            <div id="esc-echappee-box" class="mt-2 pt-2 border-top" style="display:none; font-size: 0.75rem;">
+                                <div class="d-flex justify-content-between"><span>Échappée tête :</span><strong id="res-echappee-val">--</strong></div>
+                                <div id="res-echappee-msg" class="text-end fst-italic"></div>
+                            </div>
                         </div>
-                        <button onclick="ajouterAuProjet('Escalier')" id="btn-add-Escalier" class="btn btn-sm btn-outline-dark w-100 mt-2"><i class="bi bi-plus-circle me-1"></i>Ajouter au projet</button>
                     </div>
                 </div>
 
                 <div class="col-md-6">
-                    <div class="card-custom h-100" id="card-Plafond">
-                        <div class="d-flex align-items-center mb-3"><div class="rounded-circle bg-light p-3 me-3 text-secondary"><i class="bi bi-grid-3x3 fs-4"></i></div><div><h5 class="fw-bold m-0">Faux Plafond</h5><small class="text-muted" style="font-size: 0.7rem;">Calepinage & Matériaux</small></div></div>
+                    <div class="card-custom h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle bg-light p-3 me-3 text-secondary"><i class="bi bi-grid-3x3 fs-4"></i></div>
+                            <div><h5 class="fw-bold m-0">Faux Plafond</h5><small class="text-muted" style="font-size: 0.7rem;">Calepinage & Matériaux</small></div>
+                        </div>
+
                         <div class="row g-2 mb-2">
                             <div class="col-6"><label class="small text-muted">Long. Salle (mm)</label><input type="number" id="plaf-L" class="form-control form-control-sm" placeholder="Ex: 4500" oninput="calcPlafond()"></div>
                             <div class="col-6"><label class="small text-muted">Larg. Salle (mm)</label><input type="number" id="plaf-l" class="form-control form-control-sm" placeholder="Ex: 3200" oninput="calcPlafond()"></div>
                         </div>
+
                         <div class="mb-3">
                             <label class="small text-muted">Format Dalle</label>
-                            <select id="plaf-type" class="form-select form-select-sm" onchange="calcPlafond()"><option value="600-600">600 x 600 mm (Standard)</option><option value="1200-600">1200 x 600 mm</option></select>
+                            <select id="plaf-type" class="form-select form-select-sm" onchange="calcPlafond()">
+                                <option value="600-600">600 x 600 mm (Standard)</option>
+                                <option value="1200-600">1200 x 600 mm</option>
+                            </select>
                         </div>
+
                         <div class="result-box mt-auto text-start">
                             <div id="plaf-res-titre" class="fw-bold mb-1 text-center">...</div>
+                            
                             <div id="plaf-calepinage" class="small border-bottom pb-2 mb-2" style="display:none;">
                                 <div class="d-flex justify-content-between"><span class="text-muted">Sens Longueur :</span><strong id="res-pose-L" class="text-end">--</strong></div>
                                 <div class="text-end fst-italic text-muted" style="font-size:0.65rem;" id="res-rive-L">Coupes : --</div>
                                 <div class="d-flex justify-content-between mt-1"><span class="text-muted">Sens Largeur :</span><strong id="res-pose-l" class="text-end">--</strong></div>
                                 <div class="text-end fst-italic text-muted" style="font-size:0.65rem;" id="res-rive-l">Coupes : --</div>
                             </div>
+
                             <div id="plaf-matos" class="row g-1 text-center" style="display:none; font-size: 0.7rem;">
                                 <div class="col-4"><div class="bg-white border rounded p-1"><strong id="qty-dalles" class="d-block text-primary">0</strong>Dalles</div></div>
                                 <div class="col-4"><div class="bg-white border rounded p-1"><strong id="qty-porteurs" class="d-block">0</strong>Porteurs</div></div>
@@ -185,23 +282,29 @@
                                 <div class="col-6 mt-1"><div class="bg-white border rounded p-1"><strong id="qty-ent-600" class="d-block">0</strong>Entret. 600</div></div>
                             </div>
                         </div>
-                        <button onclick="ajouterAuProjet('Plafond')" id="btn-add-Plafond" class="btn btn-sm btn-outline-dark w-100 mt-2"><i class="bi bi-plus-circle me-1"></i>Ajouter au projet</button>
                     </div>
                 </div>
 
                 <div class="col-md-6">
-                    <div class="card-custom h-100" id="card-Carrelage">
-                        <div class="d-flex align-items-center mb-3"><div class="rounded-circle bg-light p-3 me-3 text-info"><i class="bi bi-grid-fill fs-4"></i></div><div><h5 class="fw-bold m-0">Carrelage Sol</h5><small class="text-muted" style="font-size: 0.7rem;">Calepinage & Colle Pro</small></div></div>
+                    <div class="card-custom h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle bg-light p-3 me-3 text-info"><i class="bi bi-grid-fill fs-4"></i></div>
+                            <div><h5 class="fw-bold m-0">Carrelage Sol</h5><small class="text-muted" style="font-size: 0.7rem;">Calepinage & Colle Pro</small></div>
+                        </div>
+
                         <div class="row g-2 mb-2">
                             <div class="col-6"><label class="small text-muted">Long. Pièce (mm)</label><input type="number" id="carr-L" class="form-control form-control-sm" placeholder="Ex: 5000" oninput="calcCarrelage()"></div>
                             <div class="col-6"><label class="small text-muted">Larg. Pièce (mm)</label><input type="number" id="carr-l" class="form-control form-control-sm" placeholder="Ex: 4500" oninput="calcCarrelage()"></div>
                         </div>
+
                         <div class="row g-2 mb-3">
                             <div class="col-6"><label class="small text-muted">Long. Carreau (cm)</label><input type="number" id="tile-L" class="form-control form-control-sm" placeholder="Ex: 60" oninput="calcCarrelage()"></div>
                             <div class="col-6"><label class="small text-muted">Larg. Carreau (cm)</label><input type="number" id="tile-l" class="form-control form-control-sm" placeholder="Ex: 60" oninput="calcCarrelage()"></div>
                         </div>
+
                         <div class="result-box mt-auto text-start">
                             <div id="carr-res-titre" class="fw-bold mb-1 text-center">...</div>
+                            
                             <div id="carr-details" class="row g-1 text-center" style="display:none; font-size: 0.7rem;">
                                 <div class="col-4"><div class="bg-white border rounded p-1 h-100 d-flex flex-column justify-content-center"><strong id="res-nb-carreaux" class="d-block text-primary fs-6">0</strong><span class="text-muted">Carreaux</span><small class="text-muted fst-italic" style="font-size:0.6rem">Grille +5%</small></div></div>
                                 <div class="col-4"><div class="bg-white border rounded p-1 h-100 d-flex flex-column justify-content-center"><strong id="res-colle" class="d-block text-danger fs-6">0</strong><span class="text-muted">kg Colle</span><small id="info-encollage" class="text-muted fst-italic" style="font-size:0.6rem">--</small></div></div>
@@ -209,66 +312,431 @@
                                 <div class="col-12 mt-1"><div class="bg-light border-0 rounded p-1 text-muted fst-italic" style="font-size: 0.65rem;"><span id="res-grille-info">--</span></div></div>
                             </div>
                         </div>
-                        <button onclick="ajouterAuProjet('Carrelage')" id="btn-add-Carrelage" class="btn btn-sm btn-outline-dark w-100 mt-2"><i class="bi bi-plus-circle me-1"></i>Ajouter au projet</button>
                     </div>
                 </div>
 
-            <!-- SECTION GESTION DES PROJETS -->
-            <div class="row mt-5 pb-5">
-                <div class="col-12">
-                    <div class="card-custom border-top border-4 border-dark">
-                        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-                            <div class="d-flex align-items-center flex-grow-1">
-                                <i class="bi bi-folder2-open fs-3 me-3 text-dark"></i>
-                                <div class="w-100"><input type="text" id="project-name" class="form-control fw-bold border-0 p-0 fs-4 bg-transparent" placeholder="Mon Chantier..." oninput="saveProjectName()"></div>
-                            </div>
-                            <div><button onclick="genererPDF()" class="btn btn-dark btn-sm"><i class="bi bi-file-earmark-pdf me-1"></i>Exporter PDF</button></div>
-                        </div>
-                        <div class="table-responsive mb-4">
-                            <table class="table table-hover align-middle" id="tableau-projet">
-                                <thead class="table-light"><tr><th>Lot</th><th>Zone</th><th>Détails</th><th>Matériaux</th><th class="text-end">Action</th></tr></thead>
-                                <tbody id="projet-body"></tbody>
-                            </table>
-                        </div>
-                        <div id="empty-projet-msg" class="text-center text-muted py-4">Aucun calcul enregistré.</div>
-                        <div id="zone-totaux" class="bg-light p-3 rounded border" style="display:none;"><h6 class="fw-bold text-uppercase text-muted mb-3"><i class="bi bi-calculator me-2"></i>Totaux Globaux</h6><div class="row g-3" id="container-totaux"></div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            </div> </div>
 
         <div id="section-biblio" class="fade-in" style="display: none;">
             <div class="mb-4"><h2 class="fw-bold mb-1">Bibliothèque Technique</h2><p class="text-muted">Modèles 3D et plans.</p></div>
             <div class="row mb-4"><div class="col-md-3"><div class="card-custom d-flex align-items-center p-3"><div class="rounded-circle bg-light p-3 me-3 text-warning"><i class="bi bi-box-fill fs-4"></i></div><div><h3 class="m-0 fw-bold" id="stat-b-total">0</h3><small class="text-muted">Fichiers</small></div></div></div></div>
             <div id="auth-wall" class="card-custom text-center py-5 mb-4 border-0" style="background: linear-gradient(135deg, #fff 0%, #f1f5f9 100%);"><div class="mb-3"><i class="bi bi-shield-lock text-warning" style="font-size: 3.5rem;"></i></div><h3 class="fw-bold mb-3">Accès Réservé</h3><button onclick="loginWithGoogle()" class="btn btn-dark btn-lg px-5 shadow-lg rounded-pill"><i class="bi bi-google me-2"></i> Connexion</button></div>
             <div id="biblio-content" style="display: none;">
-                <div class="card-custom mb-4 p-3"><div class="row g-2"><div class="col-md-6"><div class="input-group"><span class="input-group-text bg-white border-end-0 ps-3"><i class="bi bi-search text-muted"></i></span><input type="text" id="searchBiblio" class="form-control form-control-custom border-start-0" placeholder="Rechercher..."></div></div><div class="col-md-3"><select id="filterLogiciel" class="form-select form-select-custom"><option value="">Tous logiciels</option><option value="SolidWorks">SolidWorks</option><option value="SketchUp">SketchUp</option><option value="AutoCAD">AutoCAD</option></select></div></div></div>
-                <div class="card-custom p-0 overflow-hidden"><div id="loader-biblio" class="text-center py-5"><div class="loading-spinner"></div><p class="text-muted">Chargement...</p></div><div class="table-responsive"><table class="table table-custom table-hover m-0" id="table-biblio-wrap" style="display:none;"><thead><tr><th class="ps-4">Nom</th><th>Logiciel</th><th>Description</th><th>Catégorie</th><th class="text-end pe-4">Action</th></tr></thead><tbody id="biblioBody"></tbody></table></div></div>
+                <div class="card-custom mb-4 p-3">
+                    <div class="row g-2">
+                        <div class="col-md-6"><div class="input-group"><span class="input-group-text bg-white border-end-0 ps-3"><i class="bi bi-search text-muted"></i></span><input type="text" id="searchBiblio" class="form-control form-control-custom border-start-0" placeholder="Rechercher..."></div></div>
+                        <div class="col-md-3"><select id="filterLogiciel" class="form-select form-select-custom"><option value="">Tous logiciels</option><option value="SolidWorks">SolidWorks</option><option value="SketchUp">SketchUp</option><option value="AutoCAD">AutoCAD</option></select></div>
+                    </div>
+                </div>
+                <div class="card-custom p-0 overflow-hidden">
+                    <div id="loader-biblio" class="text-center py-5"><div class="loading-spinner"></div><p class="text-muted">Chargement...</p></div>
+                    <div class="table-responsive"><table class="table table-custom table-hover m-0" id="table-biblio-wrap" style="display:none;"><thead><tr><th class="ps-4">Nom</th><th>Logiciel</th><th>Description</th><th>Catégorie</th><th class="text-end pe-4">Action</th></tr></thead><tbody id="biblioBody"></tbody></table></div>
+                </div>
             </div>
         </div>
 
         <div id="section-favoris" class="fade-in" style="display: none;">
-            <div class="mb-4"><h2 class="fw-bold mb-1">Mes Favoris</h2></div>
+            <div class="mb-4"><h2 class="fw-bold mb-1">Mes Favoris</h2><p class="text-muted">Vos ressources sauvegardées.</p></div>
             <div class="card-custom p-0 overflow-hidden"><div class="table-responsive"><table class="table table-custom table-hover m-0"><thead><tr><th class="ps-4">Nom</th><th>Type</th><th>Infos</th><th class="text-end pe-4">Action</th></tr></thead><tbody id="favBody"><tr><td colspan="4" class="text-center p-4 text-muted">Vous n'avez pas encore de favoris.</td></tr></tbody></table></div></div>
         </div>
 
         <div id="section-admin" class="fade-in" style="display: none;">
             <div class="d-flex justify-content-between align-items-center mb-4"><h2 class="fw-bold text-danger">Administration</h2><button onclick="resetAdminForms()" class="btn btn-outline-secondary btn-sm">Reset</button></div>
             <div class="row">
-                <div class="col-md-6"><div class="card-custom border-top border-4 border-danger"><h5 class="fw-bold mb-3">Fournisseurs</h5><form id="formFournisseur" onsubmit="sauvegarderFournisseur(event)"><input type="hidden" id="adm-f-uid"><div class="mb-2"><input type="text" id="adm-f-nom" class="form-control" placeholder="Nom" required></div><div class="mb-2"><select id="adm-f-cat" class="form-select"><option value="Quincaillerie">Quincaillerie</option><option value="Bois">Bois</option><option value="Électricité">Électricité</option><option value="Isolation">Isolation</option><option value="Métal">Métal</option><option value="Carrelage">Carrelage</option></select></div><div class="mb-2"><input type="text" id="adm-f-desc" class="form-control" placeholder="Description"></div><div class="mb-2"><input type="text" id="adm-f-prod" class="form-control" placeholder="Produit"></div><div class="mb-3"><input type="url" id="adm-f-lien" class="form-control" placeholder="Lien" required></div><button type="submit" id="btn-save-f" class="btn btn-dark w-100">Enregistrer</button></form></div></div>
-                <div class="col-md-6"><div class="card-custom border-top border-4 border-primary"><h5 class="fw-bold mb-3">Bibliothèque</h5><form id="formBiblio" onsubmit="sauvegarderFichier(event)"><input type="hidden" id="adm-b-uid"><div class="mb-2"><input type="text" id="adm-b-nom" class="form-control" placeholder="Nom" required></div><div class="row g-2 mb-2"><div class="col"><select id="adm-b-log" class="form-select"><option value="SolidWorks">SolidWorks</option><option value="SketchUp">SketchUp</option><option value="AutoCAD">AutoCAD</option></select></div><div class="col"><input type="text" id="adm-b-type" class="form-control" placeholder="Ext"></div></div><div class="mb-2"><input type="text" id="adm-b-cat" class="form-control" placeholder="Catégorie"></div><div class="mb-2"><input type="text" id="adm-b-desc" class="form-control" placeholder="Desc"></div><div class="mb-2"><input type="url" id="adm-b-lien" class="form-control" placeholder="Lien DL" required></div><div class="mb-2"><input type="url" id="adm-b-visu" class="form-control" placeholder="Lien Visu 3D (.glb)"></div><div class="mb-3"><input type="number" id="adm-b-prix" class="form-control" placeholder="Prix" value="0"></div><button type="submit" id="btn-save-b" class="btn btn-dark w-100">Enregistrer</button></form></div></div>
+                <div class="col-md-6">
+                    <div class="card-custom border-top border-4 border-danger">
+                        <h5 class="fw-bold mb-3">Fournisseurs</h5>
+                        <form id="formFournisseur" onsubmit="sauvegarderFournisseur(event)">
+                            <input type="hidden" id="adm-f-uid"><div class="mb-2"><input type="text" id="adm-f-nom" class="form-control" placeholder="Nom" required></div><div class="mb-2"><select id="adm-f-cat" class="form-select"><option value="Quincaillerie">Quincaillerie</option><option value="Bois">Bois</option><option value="Électricité">Électricité</option><option value="Isolation">Isolation</option><option value="Métal">Métal</option><option value="Carrelage">Carrelage</option></select></div><div class="mb-2"><input type="text" id="adm-f-desc" class="form-control" placeholder="Description"></div><div class="mb-2"><input type="text" id="adm-f-prod" class="form-control" placeholder="Produit"></div><div class="mb-3"><input type="url" id="adm-f-lien" class="form-control" placeholder="Lien" required></div><button type="submit" id="btn-save-f" class="btn btn-dark w-100">Enregistrer</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card-custom border-top border-4 border-primary">
+                        <h5 class="fw-bold mb-3">Bibliothèque</h5>
+                        <form id="formBiblio" onsubmit="sauvegarderFichier(event)">
+                            <input type="hidden" id="adm-b-uid">
+                            <div class="mb-2"><input type="text" id="adm-b-nom" class="form-control" placeholder="Nom" required></div>
+                            <div class="row g-2 mb-2"><div class="col"><select id="adm-b-log" class="form-select"><option value="SolidWorks">SolidWorks</option><option value="SketchUp">SketchUp</option><option value="AutoCAD">AutoCAD</option></select></div><div class="col"><input type="text" id="adm-b-type" class="form-control" placeholder="Ext"></div></div>
+                            <div class="mb-2"><input type="text" id="adm-b-cat" class="form-control" placeholder="Catégorie"></div>
+                            <div class="mb-2"><input type="text" id="adm-b-desc" class="form-control" placeholder="Desc"></div>
+                            <div class="mb-2"><input type="url" id="adm-b-lien" class="form-control" placeholder="Lien DL" required></div>
+                            <div class="mb-2"><input type="url" id="adm-b-visu" class="form-control" placeholder="Lien Visu 3D (.glb)"></div>
+                            <div class="mb-3"><input type="number" id="adm-b-prix" class="form-control" placeholder="Prix" value="0"></div>
+                            <button type="submit" id="btn-save-b" class="btn btn-dark w-100">Enregistrer</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-
-    </div>
-
-    <footer class="footer mt-auto py-4 bg-white border-top">
-        <div class="container text-center"><p class="m-0 fw-bold mb-2">ProRessources &copy; 2025</p></div>
+    </div> <footer class="footer mt-auto py-4 bg-white border-top">
+        <div class="container text-center">
+            <p class="m-0 fw-bold mb-2">ProRessources &copy; 2025</p>
+            <div class="small text-muted">
+                <a href="#" onclick="Swal.fire({title: 'Mentions Légales', html: '<div class=\'text-start\'><b>Éditeur :</b> Site personnel à but non commercial.<br><br><b>Hébergement :</b><br>GitHub Inc.<br>88 Colin P Kelly Jr St<br>San Francisco, CA 94107<br>United States<br><br><b>Propriété :</b><br>Le code source et le concept sont protégés par une licence propriétaire.</div>', icon: 'info'})" class="text-decoration-none text-muted me-3">Mentions Légales</a>
+                <a href="#" onclick="Swal.fire({title: 'Confidentialité & RGPD', html: '<div class=\'text-start\'><b>Cookies :</b> Ce site utilise des cookies Google AdSense pour la publicité et Firebase pour l\'authentification.<br><br><b>Données :</b> Vos favoris sont stockés de manière sécurisée sur les serveurs de Google (Firebase).<br><br><b>Vos droits :</b> Vous pouvez demander la suppression de vos données à tout moment.', icon: 'info'})" class="text-decoration-none text-muted me-3">Confidentialité</a>
+                <span class="text-muted">V 3.0</span>
+            </div>
+        </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="module" src="app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+    
+    <script>
+        // --- CALCULATRICES ---
+        function calcPoids() {
+            const L = (parseFloat(document.getElementById('calc-L').value) || 0) / 1000;
+            const l = (parseFloat(document.getElementById('calc-l').value) || 0) / 1000;
+            const ep = (parseFloat(document.getElementById('calc-ep').value) || 0) / 1000;
+            const mat = parseFloat(document.getElementById('calc-mat').value) || 750;
+            document.getElementById('res-poids').innerText = (L * l * ep * mat).toFixed(2);
+        }
+        function calcSurf() {
+            const L = parseFloat(document.getElementById('surf-L').value) || 0;
+            const H = parseFloat(document.getElementById('surf-H').value) || 0;
+            const deduct = parseFloat(document.getElementById('surf-deduct').value) || 0;
+            let surf = (L * H) - deduct; if(surf < 0) surf = 0;
+            document.getElementById('res-surf').innerText = surf.toFixed(2);
+        }
+        function convInchToMm() {
+            const i = parseFloat(document.getElementById('conv-inch').value);
+            document.getElementById('conv-mm').value = !isNaN(i) ? (i * 25.4).toFixed(2) : "";
+        }
+        function convMmToInch() {
+            const m = parseFloat(document.getElementById('conv-mm').value);
+            document.getElementById('conv-inch').value = !isNaN(m) ? (m / 25.4).toFixed(3) : "";
+        }
 
+        // --- ESCALIER EXPERT (V6) ---
+        function updateEscLabel() {
+            const type = document.getElementById('esc-type').value;
+            const label = document.getElementById('label-rec');
+            label.innerText = type === 'L' ? "Ligne de foulée (mm)" : "Reculement (mm)";
+        }
+
+        function calcEscalier() {
+            const ht = parseFloat(document.getElementById('esc-ht').value);
+            const largeur = parseFloat(document.getElementById('esc-largeur').value);
+            let rec = parseFloat(document.getElementById('esc-rec').value); 
+            const type = document.getElementById('esc-type').value;
+            const longTremie = parseFloat(document.getElementById('esc-tremie').value) || 0;
+            const epDalle = parseFloat(document.getElementById('esc-dalle').value) || 0;
+
+            const titre = document.getElementById('esc-res-titre');
+            const txt = document.getElementById('esc-res-txt');
+            const box = document.querySelector('#esc-ht').closest('.card-custom').querySelector('.result-box');
+            const detailsBox = document.getElementById('esc-details');
+            const echappeeBox = document.getElementById('esc-echappee-box');
+
+            if (!ht || ht <= 0) {
+                titre.innerHTML = "..."; txt.innerHTML = "Entrez la hauteur.";
+                box.style.borderLeft = "none"; echappeeBox.style.display = "none"; detailsBox.style.display = "none";
+                return;
+            }
+
+            let nbHauteurs = Math.round(ht / 175);
+            if (nbHauteurs < 2) nbHauteurs = 2;
+
+            if (rec && rec > 0) {
+                let blondelValide = false;
+                let tentative = 0;
+                while (!blondelValide && tentative < 10) {
+                    let h_test = ht / nbHauteurs;
+                    let g_test = rec / (nbHauteurs - 1); 
+                    let pas = (2 * h_test) + g_test;
+                    if (pas > 640) nbHauteurs++;
+                    else if (pas < 580 && nbHauteurs > 2) nbHauteurs--;
+                    else blondelValide = true;
+                    tentative++;
+                }
+            }
+
+            let h = ht / nbHauteurs;
+            let g;
+            if (rec && rec > 0) {
+                g = rec / (nbHauteurs - 1);
+            } else {
+                g = 630 - (2 * h);
+                rec = g * (nbHauteurs - 1);
+            }
+
+            let pasFoulee = (2 * h) + g;
+            let status = "success";
+            let message = "Confort optimal";
+
+            if (pasFoulee < 570) { status = "danger"; message = "⛔ Trop court (Piétine)"; }
+            else if (pasFoulee < 600) { status = "warning"; message = "⚠️ Un peu court"; }
+            else if (pasFoulee > 650) { status = "warning"; message = "⚠️ Pas trop long"; }
+            else if (pasFoulee > 670) { status = "danger"; message = "⛔ Trop long (Saut)"; }
+            else { status = "success"; message = "✅ Blondel OK (" + (pasFoulee/10).toFixed(1) + " cm)"; }
+
+            let angleRad = Math.atan(h / g);
+            let angleDeg = angleRad * (180 / Math.PI);
+            let solFoulee = rec, solInt = solFoulee, solExt = solFoulee;
+
+            if (type === 'L' && largeur > 0) {
+                let delta = largeur * 0.785;
+                solExt = solFoulee + delta;
+                solInt = solFoulee - delta;
+                if(solInt < 0) solInt = h * nbHauteurs;
+            }
+
+            let margeCoupe = 300;
+            let limonFoulee = Math.sqrt(Math.pow(ht, 2) + Math.pow(solFoulee, 2)); 
+            let limonInt = Math.sqrt(Math.pow(ht, 2) + Math.pow(solInt, 2));
+            let limonExt = Math.sqrt(Math.pow(ht, 2) + Math.pow(solExt, 2));
+
+            detailsBox.style.display = "block";
+            const angleElem = document.getElementById('res-angle');
+            angleElem.innerText = angleDeg.toFixed(1) + "°";
+            angleElem.className = (angleDeg > 45 || angleDeg < 25) ? "text-danger fw-bold" : (angleDeg > 38 ? "text-warning fw-bold" : "text-success fw-bold");
+
+            if (!largeur || largeur <= 0) {
+                document.getElementById('res-limon-int').innerText = "Manque largeur";
+                document.getElementById('res-limon-ext').innerText = ((limonFoulee + margeCoupe)/1000).toFixed(2) + " m";
+            } else {
+                document.getElementById('res-limon-int').innerText = ((limonInt + margeCoupe)/1000).toFixed(2) + " m";
+                document.getElementById('res-limon-ext').innerText = ((limonExt + margeCoupe)/1000).toFixed(2) + " m";
+            }
+
+            if (longTremie > 0 && epDalle > 0) {
+                echappeeBox.style.display = "block";
+                let distanceAuBord = solFoulee - longTremie;
+                const eVal = document.getElementById('res-echappee-val');
+                const eMsg = document.getElementById('res-echappee-msg');
+                if (distanceAuBord < 0) { eVal.innerHTML = "∞"; eMsg.innerHTML = "<span class='text-success'>Trémie large</span>"; }
+                else {
+                    let nbMarchesBord = Math.ceil(distanceAuBord / g);
+                    let echappee = ht - (nbMarchesBord * h) - epDalle;
+                    eVal.innerHTML = (echappee / 1000).toFixed(2) + " m";
+                    if (echappee < 1900) { eMsg.innerHTML = "⛔ Tête !"; eMsg.className = "text-danger fw-bold"; if(status!=="danger") status="warning"; }
+                    else { eMsg.innerHTML = "✅ OK"; eMsg.className = "text-success"; }
+                }
+            } else { echappeeBox.style.display = "none"; }
+
+            const colors = { "success": "#198754", "warning": "#ffc107", "danger": "#dc3545" };
+            box.style.borderLeft = `5px solid ${colors[status]}`;
+            titre.style.color = colors[status];
+            titre.innerHTML = `${nbHauteurs} hauteurs <small class="text-muted">(${nbHauteurs-1} marches)</small>`;
+            txt.innerHTML = `h: ${h.toFixed(1)}mm | g: <strong>${g.toFixed(1)} mm</strong><br><small class="text-muted">Reculement : ${rec.toFixed(0)} mm</small><br><span style="color:${colors[status]}">${message}</span>`;
+        }
+
+        // --- FAUX PLAFOND (V9) ---
+        function calcPlafond() {
+            const L = parseFloat(document.getElementById('plaf-L').value);
+            const l = parseFloat(document.getElementById('plaf-l').value);
+            const type = document.getElementById('plaf-type').value;
+
+            const titre = document.getElementById('plaf-res-titre');
+            const boxCalepinage = document.getElementById('plaf-calepinage');
+            const boxMatos = document.getElementById('plaf-matos');
+            const box = document.querySelector('#plaf-L').closest('.card-custom').querySelector('.result-box');
+
+            if (!L || !l || L <= 0 || l <= 0) {
+                titre.innerHTML = "..."; titre.className = "fw-bold mb-1 text-center";
+                box.style.borderLeft = "none"; boxCalepinage.style.display = "none"; boxMatos.style.display = "none";
+                return;
+            }
+
+            let dL, dl;
+            if (type === "1200-600") { dL = 1200; dl = 600; } else { dL = 600; dl = 600; }
+
+            function optimiserCalepinage(dimSalle, dimDalle) {
+                let nbTheorique = dimSalle / dimDalle;
+                let nbDallesRangee = Math.ceil(nbTheorique);
+                let entier = Math.floor(nbTheorique);
+                let choix = {};
+
+                let resteJoint = dimSalle % dimDalle;
+                let riveJoint = (resteJoint === 0) ? dimDalle : (resteJoint / 2);
+
+                let riveMilieu = riveJoint + (dimDalle / 2);
+                if (riveMilieu > dimDalle) riveMilieu -= dimDalle;
+
+                if (riveJoint === dimDalle) choix = { pose: "Joint (Plein)", rive: dimDalle };
+                else if (riveMilieu > riveJoint) choix = { pose: "Centré (Milieu)", rive: riveMilieu };
+                else choix = { pose: "Joint (Axe)", rive: riveJoint };
+
+                return { pose: choix.pose, rive: choix.rive, nb: nbDallesRangee };
+            }
+
+            let resL = optimiserCalepinage(L, dL);
+            let resl = optimiserCalepinage(l, dl);
+
+            let surface = (L * l) / 1000000;
+            let perimetre = (L + l) * 2 / 1000;
+            
+            let nbDalles = resL.nb * resl.nb;
+            
+            let nbCornieres = Math.ceil(perimetre / 3);
+            let grandeDim = Math.max(L, l);
+            let petiteDim = Math.min(L, l);
+            let nbRangeesPorteurs = Math.ceil((petiteDim / 1000) / 1.2);
+            let longPorteursTotale = nbRangeesPorteurs * (grandeDim / 1000);
+            let nbPorteurs = Math.ceil(longPorteursTotale / 3.6);
+            let nbEnt1200 = Math.ceil((surface * 1.7) / 1.2);
+            let nbEnt600 = (type === "600-600") ? Math.ceil((surface * 0.85) / 0.6) : 0;
+
+            titre.innerText = surface.toFixed(2) + " m²";
+            titre.className = "fw-bold mb-1 text-center text-primary";
+            box.style.borderLeft = "5px solid #0d6efd";
+
+            boxCalepinage.style.display = "block";
+            document.getElementById('res-pose-L').innerText = resL.pose + " (" + resL.nb + " rangs)";
+            document.getElementById('res-rive-L').innerText = "Rives : " + resL.rive.toFixed(0) + " mm";
+            document.getElementById('res-pose-l').innerText = resl.pose + " (" + resl.nb + " rangs)";
+            document.getElementById('res-rive-l').innerText = "Rives : " + resl.rive.toFixed(0) + " mm";
+
+            boxMatos.style.display = "flex";
+            document.getElementById('qty-dalles').innerText = nbDalles;
+            document.getElementById('qty-porteurs').innerText = nbPorteurs;
+            document.getElementById('qty-cornieres').innerText = nbCornieres;
+            document.getElementById('qty-ent-1200').innerText = nbEnt1200;
+            document.getElementById('qty-ent-600').innerText = nbEnt600;
+        }
+
+        // --- CARRELAGE (V5) ---
+        function calcCarrelage() {
+            const L = parseFloat(document.getElementById('carr-L').value);
+            const l = parseFloat(document.getElementById('carr-l').value);
+            const tL = parseFloat(document.getElementById('tile-L').value);
+            const tl = parseFloat(document.getElementById('tile-l').value);
+
+            const titre = document.getElementById('carr-res-titre');
+            const details = document.getElementById('carr-details');
+            const box = document.querySelector('#carr-L').closest('.card-custom').querySelector('.result-box');
+
+            if (!L || !l || !tL || !tl) {
+                titre.innerHTML = "Complétez les dimensions";
+                titre.className = "fw-bold mb-1 text-center text-muted";
+                box.style.borderLeft = "none"; details.style.display = "none";
+                return;
+            }
+
+            const tileL_mm = tL * 10;
+            const tilel_mm = tl * 10;
+            const surfaceReelle = (L * l) / 1000000;
+
+            let nbL = Math.ceil(L / tileL_mm);
+            let nbl = Math.ceil(l / tilel_mm);
+            let totalCarreauxNet = nbL * nbl;
+            let nbCarreauxFinal = Math.ceil(totalCarreauxNet * 1.05);
+
+            let grandCote = Math.max(tL, tl);
+            let conso = 4.5; 
+            let typeEnc = "Simple (4.5kg)";
+            if (grandCote >= 40) { conso = 8; typeEnc = "Double (8kg)"; }
+            let qtyColle = Math.ceil(surfaceReelle * conso * 1.10);
+
+            let perimetre = (L + l) * 2 / 1000;
+            let longPlinthe = grandCote / 100;
+            let nbPlinthesNet = Math.ceil(perimetre / longPlinthe);
+            let nbPlinthesFinal = Math.ceil(nbPlinthesNet * 1.05);
+
+            titre.innerHTML = `<i class="bi bi-rulers me-2"></i>Surface : ${surfaceReelle.toFixed(2)} m²`;
+            titre.className = "fw-bold mb-2 text-center text-info";
+            box.style.borderLeft = "5px solid #0dcaf0"; 
+
+            details.style.display = "flex";
+            document.getElementById('res-nb-carreaux').innerText = nbCarreauxFinal;
+            document.getElementById('res-grille-info').innerHTML = `Pose : <strong>${nbL} x ${nbl}</strong> = ${totalCarreauxNet} carreaux nets`;
+            document.getElementById('res-colle').innerText = qtyColle;
+            document.getElementById('info-encollage').innerText = typeEnc + " +10%";
+            document.getElementById('res-plinthes-ml').innerText = perimetre.toFixed(2) + " m";
+            document.getElementById('res-plinthes-nb').innerText = nbPlinthesFinal;
+        }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, where, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyC70c8hVhGU7uFJad-Su2CMrm-TCxlbsoM", authDomain: "proressources-3dab4.firebaseapp.com", projectId: "proressources-3dab4", storageBucket: "proressources-3dab4.firebasestorage.app", messagingSenderId: "940538561110", appId: "1:940538561110:web:f8ca7e1cbc8e73b02c31f7" };
+        const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app); const provider = new GoogleAuthProvider(); const ADMIN_EMAIL = "3d.build.007@gmail.com";
+        let currentUser = null, fournisseursData = [], biblioData = [], triState = { col: 'nom', sens: 1 }, userFavorites = new Set(); 
+
+        window.loginWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e){ Swal.fire("Erreur", e.message, "error"); } }
+        window.logout = async () => { await signOut(auth); location.reload(); }
+        window.trier = function(col) { if(triState.col === col) triState.sens *= -1; else { triState.col = col; triState.sens = 1; } fa(); }
+        window.open3DViewer = function(url) {
+            const viewer = document.getElementById('viewer3d');
+            viewer.src = url;
+            const modal = new window.bootstrap.Modal(document.getElementById('modal3D'));
+            modal.show();
+        }
+
+        async function loadFavorites() {
+            if (!currentUser) return;
+            const q = query(collection(db, "favoris"), where("uid", "==", currentUser.uid));
+            const qs = await getDocs(q); userFavorites.clear(); qs.forEach((d) => userFavorites.add(d.data().itemId)); fa(); fb();
+        }
+        window.toggleFavorite = async function(type, id) {
+            if (!currentUser) { Swal.fire("Oups", "Connectez-vous !", "warning"); return; }
+            const favId = currentUser.uid + "_" + id;
+            if (userFavorites.has(id)) {
+                try { await deleteDoc(doc(db, "favoris", favId)); userFavorites.delete(id); document.getElementById(`fav-btn-${id}`)?.classList.replace('bi-star-fill', 'bi-star'); document.getElementById(`fav-btn-${id}`)?.classList.remove('text-warning'); if(document.getElementById('section-favoris').style.display === 'block') renderFavoritesPage(); } catch(e) {}
+            } else {
+                try { await setDoc(doc(db, "favoris", favId), { uid: currentUser.uid, itemId: id, type: type }); userFavorites.add(id); document.getElementById(`fav-btn-${id}`)?.classList.replace('bi-star', 'bi-star-fill'); document.getElementById(`fav-btn-${id}`)?.classList.add('text-warning'); } catch(e) {}
+            }
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user; updateUIState(true, user); await loadFavorites();
+                const isAdmin = user.email === ADMIN_EMAIL; const isLamache = user.email.endsWith("@lamache.org");
+                if (isAdmin) { document.getElementById('nav-admin').style.display = 'block'; document.getElementById('nav-biblio-li').style.display = 'block'; toggleAds(false); }
+                else if (isLamache) { document.getElementById('nav-admin').style.display = 'none'; document.getElementById('nav-biblio-li').style.display = 'none'; toggleAds(false); }
+                else { document.getElementById('nav-admin').style.display = 'none'; document.getElementById('nav-biblio-li').style.display = 'block'; toggleAds(true); }
+                document.getElementById('nav-favoris-li').style.display = 'block';
+                if(fournisseursData.length > 0) renderFournisseurs(fournisseursData);
+            } else {
+                currentUser = null; updateUIState(false, null); document.getElementById('nav-admin').style.display = 'none'; document.getElementById('nav-biblio-li').style.display = 'none'; document.getElementById('nav-favoris-li').style.display = 'none'; userFavorites.clear(); toggleAds(true);
+                if(fournisseursData.length > 0) renderFournisseurs(fournisseursData);
+            }
+        });
+
+        function toggleAds(show) { const d = show ? 'block' : 'none'; document.getElementById('ad-left').style.display = d; document.getElementById('ad-right').style.display = d; }
+        function updateUIState(isLoggedIn, user) {
+            if (isLoggedIn) { document.getElementById('logged-out-view').style.display = 'none'; document.getElementById('logged-in-view').style.display = 'block'; document.getElementById('user-name').innerText = user.displayName.split(' ')[0]; document.getElementById('user-photo').src = user.photoURL; loadBibliotheque(); }
+            else { document.getElementById('logged-out-view').style.display = 'block'; document.getElementById('logged-in-view').style.display = 'none'; }
+            document.getElementById('auth-wall').style.display = isLoggedIn ? 'none' : 'block'; document.getElementById('biblio-content').style.display = isLoggedIn ? 'block' : 'none';
+        }
+        window.changerOnglet = function(onglet) {
+            ['annuaire', 'outils', 'biblio', 'admin', 'favoris'].forEach(id => { document.getElementById('section-'+id).style.display = 'none'; if(document.getElementById('btn-'+id)) document.getElementById('btn-'+id).classList.remove('active'); });
+            document.getElementById('section-'+onglet).style.display = 'block'; if(document.getElementById('btn-'+onglet)) document.getElementById('btn-'+onglet).classList.add('active');
+            if(onglet === 'favoris') renderFavoritesPage();
+        }
+        function renderFavoritesPage() {
+            const tbody = document.getElementById('favBody'); tbody.innerHTML = ""; let count = 0;
+            fournisseursData.forEach(item => { if (userFavorites.has(item.docId)) { count++; tbody.innerHTML += `<tr><td class="fw-bold">${item.nom}</td><td><span class="badge badge-soft badge-blue">Fournisseur</span></td><td class="text-muted small">${item.desc}</td><td class="text-end"><a href="${item.lien}" target="_blank" class="btn btn-sm btn-outline-dark">Voir</a> <button onclick="toggleFavorite('fournisseurs', '${item.docId}')" class="btn btn-sm text-danger"><i class="bi bi-x-lg"></i></button></td></tr>`; } });
+            biblioData.forEach(item => { if (userFavorites.has(item.docId)) { count++; tbody.innerHTML += `<tr><td class="fw-bold">${item.nom}</td><td><span class="badge badge-soft badge-warning text-dark">3D</span></td><td class="text-muted small">${item.logiciel}</td><td class="text-end"><a href="${item.lien}" target="_blank" class="btn btn-sm btn-outline-dark">DL</a> <button onclick="toggleFavorite('biblio', '${item.docId}')" class="btn btn-sm text-danger"><i class="bi bi-x-lg"></i></button></td></tr>`; } });
+            if (count === 0) tbody.innerHTML = `<tr><td colspan="4" class="text-center p-5 text-muted"><i class="bi bi-star display-4 d-block mb-3"></i>Aucun favori.</td></tr>`;
+        }
+
+        window.supprimerItem = async function(col, id) { Swal.fire({title:'Sûr ?', icon:'warning', showCancelButton:true, confirmButtonColor:'#d33'}).then(async (r) => { if (r.isConfirmed) { await deleteDoc(doc(db, col, id)); col === "fournisseurs" ? loadFournisseurs(true) : loadBibliotheque(true); Swal.fire('Supprimé', '', 'success'); } }) }
+        window.editerFournisseur = function(id) { const i = fournisseursData.find(x => x.docId === id); document.getElementById('adm-f-uid').value = i.docId; document.getElementById('adm-f-nom').value = i.nom; document.getElementById('adm-f-cat').value = i.categorie; document.getElementById('adm-f-desc').value = i.desc; document.getElementById('adm-f-prod').value = i.produit; document.getElementById('adm-f-lien').value = i.lien; document.getElementById('btn-save-f').innerText = "Modifier"; document.getElementById('btn-save-f').classList.replace('btn-dark', 'btn-warning'); changerOnglet('admin'); }
+        window.editerBiblio = function(id) { const i = biblioData.find(x => x.docId === id); document.getElementById('adm-b-uid').value = i.docId; document.getElementById('adm-b-nom').value = i.nom; document.getElementById('adm-b-log').value = i.logiciel; document.getElementById('adm-b-type').value = i.type; document.getElementById('adm-b-cat').value = i.categorie; document.getElementById('adm-b-desc').value = i.desc; document.getElementById('adm-b-lien').value = i.lien; document.getElementById('adm-b-visu').value = i.lien3d || ""; document.getElementById('adm-b-prix').value = i.prix; document.getElementById('btn-save-b').innerText = "Modifier"; document.getElementById('btn-save-b').classList.replace('btn-dark', 'btn-warning'); changerOnglet('admin'); }
+        window.resetAdminForms = function() { document.getElementById('formFournisseur').reset(); document.getElementById('adm-f-uid').value = ""; document.getElementById('btn-save-f').innerText="Ajouter"; document.getElementById('btn-save-f').classList.replace('btn-warning','btn-dark'); document.getElementById('formBiblio').reset(); document.getElementById('adm-b-uid').value = ""; document.getElementById('btn-save-b').innerText="Ajouter"; document.getElementById('btn-save-b').classList.replace('btn-warning','btn-dark'); }
+        
+        window.sauvegarderFournisseur = async function(e) { e.preventDefault(); const uid = document.getElementById('adm-f-uid').value; const d = { nom: document.getElementById('adm-f-nom').value, categorie: document.getElementById('adm-f-cat').value, desc: document.getElementById('adm-f-desc').value, produit: document.getElementById('adm-f-prod').value, lien: document.getElementById('adm-f-lien').value }; try { if(uid) await updateDoc(doc(db, "fournisseurs", uid), d); else await addDoc(collection(db, "fournisseurs"), d); resetAdminForms(); loadFournisseurs(true); changerOnglet('annuaire'); Swal.fire("Succès", "", "success"); } catch(e){Swal.fire("Erreur",e.message,"error");} }
+        window.sauvegarderFichier = async function(e) { e.preventDefault(); const uid = document.getElementById('adm-b-uid').value; const d = { nom: document.getElementById('adm-b-nom').value, logiciel: document.getElementById('adm-b-log').value, type: document.getElementById('adm-b-type').value, categorie: document.getElementById('adm-b-cat').value, desc: document.getElementById('adm-b-desc').value, lien: document.getElementById('adm-b-lien').value, lien3d: document.getElementById('adm-b-visu').value, prix: Number(document.getElementById('adm-b-prix').value) }; try { if(uid) await updateDoc(doc(db, "bibliotheque", uid), d); else await addDoc(collection(db, "bibliotheque"), d); resetAdminForms(); loadBibliotheque(true); changerOnglet('biblio'); Swal.fire("Succès", "", "success"); } catch(e){Swal.fire("Erreur",e.message,"error");} }
+
+        async function loadFournisseurs(force=false) { if(!force && fournisseursData.length>0) return; const s = await getDocs(collection(db, "fournisseurs")); fournisseursData=[]; s.forEach(d=>fournisseursData.push({...d.data(), docId:d.id})); document.getElementById('loader-annuaire').style.display='none'; document.getElementById('table-annuaire-wrap').style.display='table'; renderFournisseurs(fournisseursData); }
+        function renderFournisseurs(data) { const b = document.getElementById("tableBody"); b.innerHTML=""; document.getElementById("stat-f-total").innerText=data.length; document.getElementById("stat-f-cat").innerText=[...new Set(data.map(i=>i.categorie))].length; const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL; if(data.length===0) b.innerHTML="<tr><td colspan='6' class='text-center p-4 text-muted'>Aucun résultat.</td></tr>"; data.forEach(i => { let badge='badge-gray'; if(i.categorie==='Quincaillerie') badge='badge-purple'; else if(i.categorie==='Bois') badge='badge-orange'; else if(i.categorie==='Isolation') badge='badge-green'; else if(['Électricité','Métal'].includes(i.categorie)) badge='badge-blue'; let btns = isAdmin ? `<button class="btn btn-sm btn-edit" onclick="editerFournisseur('${i.docId}')"><i class="bi bi-pencil-fill"></i></button><button class="btn btn-sm btn-delete" onclick="supprimerItem('fournisseurs', '${i.docId}')"><i class="bi bi-trash-fill"></i></button>` : ''; let starClass = userFavorites.has(i.docId) ? "bi-star-fill text-warning" : "bi-star"; let starBtn = currentUser ? `<i class="bi ${starClass} btn-fav" id="fav-btn-${i.docId}" onclick="toggleFavorite('fournisseurs', '${i.docId}')"></i>` : ''; b.innerHTML+=`<tr class="table-row-hover"><td class="ps-4 d-flex align-items-center">${starBtn}<span class="fw-bold text-dark">${i.nom||""}</span></td><td><span class="badge badge-soft ${badge}">${i.categorie||""}</span></td><td class="text-muted small">${i.desc||""}</td><td>${i.produit||""}</td><td class="text-end pe-4 admin-actions">${btns}<a href="${i.lien}" target="_blank" class="btn btn-visit btn-sm">Visiter</a></td></tr>`; }); }
+        
+        async function loadBibliotheque(force=false) { if(!force && biblioData.length>0) return; const s = await getDocs(collection(db, "bibliotheque")); biblioData=[]; s.forEach(d=>biblioData.push({...d.data(), docId:d.id})); document.getElementById('loader-biblio').style.display='none'; document.getElementById('table-biblio-wrap').style.display='table'; renderBibliotheque(biblioData); }
+        function renderBibliotheque(data) { const b = document.getElementById("biblioBody"); b.innerHTML=""; document.getElementById("stat-b-total").innerText=data.length; const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL; if(data.length===0) b.innerHTML="<tr><td colspan='6' class='text-center p-4 text-muted'>Aucun fichier.</td></tr>"; data.forEach(i => { let log='background:#eee; color:#333;'; if(i.logiciel==='SolidWorks') log='background:#FFFBEB; color:#B45309; border:1px solid #FEF3C7;'; if(i.logiciel==='SketchUp') log='background:#EFF6FF; color:#1D4ED8; border:1px solid #DBEAFE;'; let btns = isAdmin ? `<button class="btn btn-sm btn-edit" onclick="editerBiblio('${i.docId}')"><i class="bi bi-pencil-fill"></i></button><button class="btn btn-sm btn-delete" onclick="supprimerItem('bibliotheque', '${i.docId}')"><i class="bi bi-trash-fill"></i></button>` : ''; let dl = i.prix===0 ? `<a href="${i.lien||'#'}" target="_blank" class="btn btn-sm btn-warning text-white fw-bold"><i class="bi bi-download"></i></a>` : `<button class="btn btn-sm btn-dark fw-bold">${i.prix} €</button>`; let starClass = userFavorites.has(i.docId) ? "bi-star-fill text-warning" : "bi-star"; let starBtn = currentUser ? `<i class="bi ${starClass} btn-fav" id="fav-btn-${i.docId}" onclick="toggleFavorite('biblio', '${i.docId}')"></i>` : ''; 
+        let visuBtn = i.lien3d ? `<button onclick="open3DViewer('${i.lien3d}')" class="btn btn-sm btn-info text-white me-2"><i class="bi bi-box"></i></button>` : '';
+        b.innerHTML+=`<tr class="table-row-hover"><td class="ps-4 d-flex align-items-center">${starBtn}<span class="fw-bold text-dark">${i.nom||""}</span></td><td><span class="badge" style="${log}">${i.logiciel}</span></td><td class="text-muted small">${i.desc||""}</td><td>${i.categorie||""}</td><td class="text-end pe-4 admin-actions">${btns}${visuBtn}${dl}</td></tr>`; }); }
+
+        const fa = () => { const s=document.getElementById("searchInput").value.toLowerCase(), t=document.getElementById("typeFilter").value; let f = fournisseursData.filter(i=>(i.nom||"").toLowerCase().includes(s) && (t===""||i.categorie===t)); f.sort((a,b)=>{ let va=(a[triState.col]||"").toLowerCase(), vb=(b[triState.col]||"").toLowerCase(); if(va<vb)return -1*triState.sens; if(va>vb)return 1*triState.sens; return 0; }); renderFournisseurs(f); };
+        document.getElementById("searchInput").addEventListener("keyup", fa); document.getElementById("typeFilter").addEventListener("change", fa);
+        const fb = () => { const s=document.getElementById("searchBiblio").value.toLowerCase(), l=document.getElementById("filterLogiciel").value; renderBibliotheque(biblioData.filter(i=>(i.nom||"").toLowerCase().includes(s) && (l===""||i.logiciel===l))); };
+        document.getElementById("searchBiblio").addEventListener("keyup", fb); document.getElementById("filterLogiciel").addEventListener("change", fb);
+        
+        loadFournisseurs();
+    </script>
 </body>
 </html>
