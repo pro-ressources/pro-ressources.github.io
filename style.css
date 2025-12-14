@@ -1,0 +1,71 @@
+
+        :root { --primary: #0f172a; --accent: #F97316; --bg-light: #F8FAFC; --text-dark: #334155; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-light); color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* NAVBAR */
+        .navbar-custom { background-color: var(--primary); padding: 1rem 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .navbar-brand { font-weight: 700; font-size: 1.25rem; color: white !important; }
+        .nav-link { color: #94a3b8 !important; font-weight: 500; margin: 0 10px; transition: all 0.3s; position: relative; }
+        .nav-link:hover, .nav-link.active { color: white !important; }
+        .nav-link.active::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: var(--accent); }
+
+        /* UI GÉNÉRAL */
+        .card-custom { border: none; border-radius: 16px; background: white; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 24px; }
+        .form-control-custom, .form-select-custom { border-radius: 10px; padding: 12px; border: 1px solid #e2e8f0; }
+        .result-box { background: #f1f5f9; padding: 15px; border-radius: 8px; text-align: center; margin-top: 15px; font-weight: bold; color: var(--primary); }
+        
+        #project-manager ul li button {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 2px;
+}
+#project-manager ul li button:hover {
+    background-color: #e2e6ea;
+}
+
+
+        /* TABLEAU */
+        .table-custom th { background-color: var(--primary); color: white; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; padding: 16px; border-bottom: 1px solid #e2e8f0; }
+        .table-custom td { vertical-align: middle; padding: 16px; background: white; border-bottom: 1px solid #f1f5f9; }
+        .table-row-hover:hover td { background-color: #fff7ed; }
+        .clickable-header { cursor: pointer; transition: background 0.2s; }
+        .clickable-header:hover { background-color: #1e293b !important; }
+
+        /* FAVORIS & BADGES */
+        .btn-fav { cursor: pointer; color: #cbd5e1; transition: transform 0.2s, color 0.2s; font-size: 1.2rem; margin-right: 10px; }
+        .btn-fav:hover { transform: scale(1.2); color: #fbbf24; }
+        .btn-fav.active { color: #fbbf24; }
+        .badge-soft { padding: 6px 12px; border-radius: 99px; font-size: 0.75em; font-weight: 600; }
+        .badge-purple { background: #F3E8FF; color: #7E22CE; } .badge-blue { background: #E0F2FE; color: #0369A1; }
+        .badge-orange { background: #FFEDD5; color: #C2410C; } .badge-green { background: #DCFCE7; color: #15803D; }
+        .badge-gray { background: #F1F5F9; color: #475569; }
+        .btn-visit { background-color: var(--accent); color: white; border: none; border-radius: 8px; padding: 8px 16px; font-weight: 600; transition: all 0.2s; }
+        .btn-visit:hover { background-color: #ea580c; color: white; transform: translateY(-1px); }
+
+        /* MODEL VIEWER */
+        model-viewer { width: 100%; height: 400px; background-color: #f8fafc; border-radius: 8px; }
+
+        /* PIED DE PAGE */
+        .footer { margin-top: auto; background: white; border-top: 1px solid #e2e8f0; padding: 30px 0; text-align: center; color: #64748b; font-size: 0.9rem; }
+        .fade-in { animation: fadeIn 0.4s ease; } 
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .loading-spinner { width: 3rem; height: 3rem; border: 4px solid #f3f3f3; border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 50px auto; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* PUBS (Responsive) */
+        .ad-sidebar { position: fixed; top: 50%; transform: translateY(-50%); width: 160px; height: 600px; background: white; border: 1px dashed #cbd5e1; display: none; z-index: 1000; text-align: center; padding: 0; overflow: hidden; }
+        .ad-sidebar.left { left: 20px; } .ad-sidebar.right { right: 20px; }
+        @media (max-width: 1200px) { .ad-sidebar { display: none !important; } }
+        @media (min-width: 1200px) { .container { max-width: calc(100vw - 420px) !important; } }
+
+        /* --- CSS IMPRESSION --- */
+        @media print {
+            body * { visibility: hidden; }
+            #section-outils, #section-outils * { visibility: visible; }
+            #section-outils { position: absolute; left: 0; top: 0; width: 100%; }
+            .navbar-custom, .footer, .ad-sidebar, .card-custom:not(.border-dark), .alert { display: none !important; }
+            .card-custom.border-dark { position: absolute; top: 0; left: 0; width: 100%; border: none !important; box-shadow: none; }
+            #tableau-projet { width: 100%; border-collapse: collapse; }
+            #tableau-projet th, #tableau-projet td { border: 1px solid #000; padding: 8px; }
+            .btn { display: none !important; }
+        }

@@ -12,75 +12,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.css">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
     <meta name="theme-color" content="#0f172a">
-    <link rel="manifest" href="manifest.json">
-
-    <style>
-        :root { --primary: #0f172a; --accent: #F97316; --bg-light: #F8FAFC; --text-dark: #334155; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-light); color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; }
-        
-        /* NAVBAR */
-        .navbar-custom { background-color: var(--primary); padding: 1rem 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .navbar-brand { font-weight: 700; font-size: 1.25rem; color: white !important; }
-        .nav-link { color: #94a3b8 !important; font-weight: 500; margin: 0 10px; transition: all 0.3s; position: relative; }
-        .nav-link:hover, .nav-link.active { color: white !important; }
-        .nav-link.active::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: var(--accent); }
-
-        /* UI GÉNÉRAL */
-        .card-custom { border: none; border-radius: 16px; background: white; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 24px; }
-        .form-control-custom, .form-select-custom { border-radius: 10px; padding: 12px; border: 1px solid #e2e8f0; }
-        .result-box { background: #f1f5f9; padding: 15px; border-radius: 8px; text-align: center; margin-top: 15px; font-weight: bold; color: var(--primary); }
-        
-        /* TABLEAU */
-        .table-custom th { background-color: var(--primary); color: white; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; padding: 16px; border-bottom: 1px solid #e2e8f0; }
-        .table-custom td { vertical-align: middle; padding: 16px; background: white; border-bottom: 1px solid #f1f5f9; }
-        .table-row-hover:hover td { background-color: #fff7ed; }
-        .clickable-header { cursor: pointer; transition: background 0.2s; }
-        .clickable-header:hover { background-color: #1e293b !important; }
-
-        /* FAVORIS & BADGES */
-        .btn-fav { cursor: pointer; color: #cbd5e1; transition: transform 0.2s, color 0.2s; font-size: 1.2rem; margin-right: 10px; }
-        .btn-fav:hover { transform: scale(1.2); color: #fbbf24; }
-        .btn-fav.active { color: #fbbf24; }
-        .badge-soft { padding: 6px 12px; border-radius: 99px; font-size: 0.75em; font-weight: 600; }
-        .badge-purple { background: #F3E8FF; color: #7E22CE; } .badge-blue { background: #E0F2FE; color: #0369A1; }
-        .badge-orange { background: #FFEDD5; color: #C2410C; } .badge-green { background: #DCFCE7; color: #15803D; }
-        .badge-gray { background: #F1F5F9; color: #475569; }
-        .btn-visit { background-color: var(--accent); color: white; border: none; border-radius: 8px; padding: 8px 16px; font-weight: 600; transition: all 0.2s; }
-        .btn-visit:hover { background-color: #ea580c; color: white; transform: translateY(-1px); }
-
-        /* MODEL VIEWER */
-        model-viewer { width: 100%; height: 400px; background-color: #f8fafc; border-radius: 8px; }
-
-        /* PIED DE PAGE */
-        .footer { margin-top: auto; background: white; border-top: 1px solid #e2e8f0; padding: 30px 0; text-align: center; color: #64748b; font-size: 0.9rem; }
-        .fade-in { animation: fadeIn 0.4s ease; } 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .loading-spinner { width: 3rem; height: 3rem; border: 4px solid #f3f3f3; border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 50px auto; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        /* PUBS (Responsive) */
-        .ad-sidebar { position: fixed; top: 50%; transform: translateY(-50%); width: 160px; height: 600px; background: white; border: 1px dashed #cbd5e1; display: none; z-index: 1000; text-align: center; padding: 0; overflow: hidden; }
-        .ad-sidebar.left { left: 20px; } .ad-sidebar.right { right: 20px; }
-        @media (max-width: 1200px) { .ad-sidebar { display: none !important; } }
-        @media (min-width: 1200px) { .container { max-width: calc(100vw - 420px) !important; } }
-
-        /* --- CSS IMPRESSION --- */
-        @media print {
-            body * { visibility: hidden; }
-            #section-outils, #section-outils * { visibility: visible; }
-            #section-outils { position: absolute; left: 0; top: 0; width: 100%; }
-            .navbar-custom, .footer, .ad-sidebar, .card-custom:not(.border-dark), .alert { display: none !important; }
-            .card-custom.border-dark { position: absolute; top: 0; left: 0; width: 100%; border: none !important; box-shadow: none; }
-            #tableau-projet { width: 100%; border-collapse: collapse; }
-            #tableau-projet th, #tableau-projet td { border: 1px solid #000; padding: 8px; }
-            .btn { display: none !important; }
-        }
-    </style>
 </head>
 <body>
 
@@ -99,8 +35,12 @@
         </div>
     </div>
 
-    <div id="ad-left" class="ad-sidebar left"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3444819884847108" crossorigin="anonymous"></script><ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-3444819884847108" data-ad-slot="6690962979"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>
-    <div id="ad-right" class="ad-sidebar right"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3444819884847108" crossorigin="anonymous"></script><ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-3444819884847108" data-ad-slot="6690962979"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>
+    <div id="ad-left" class="ad-sidebar left">
+        <div class="p-2 text-muted small">Espace Pub</div>
+    </div>
+    <div id="ad-right" class="ad-sidebar right">
+        <div class="p-2 text-muted small">Espace Pub</div>
+    </div>
 
     <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
         <div class="container">
@@ -160,11 +100,7 @@
         <div id="section-outils" class="fade-in" style="display: none;">
             <div class="mb-4">
                 <h2 class="fw-bold mb-1">Boîte à Outils</h2>
-                <p class="text-muted">Calculatrices rapides.</p>
-                <div class="alert alert-warning py-2" style="font-size: 0.8rem;">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    <strong>Attention :</strong> Ces outils sont fournis à titre indicatif. Vérifiez toujours vos calculs.
-                </div>
+                <div class="alert alert-warning py-2" style="font-size: 0.8rem;"><i class="bi bi-exclamation-triangle-fill me-2"></i><strong>Attention :</strong> Ces outils sont fournis à titre indicatif. Vérifiez toujours vos calculs. L'auteur décline toute résponsabilité.</div>          
             </div>
             
             <div class="row g-4">
@@ -276,13 +212,15 @@
                         <button onclick="ajouterAuProjet('Carrelage')" id="btn-add-Carrelage" class="btn btn-sm btn-outline-dark w-100 mt-2"><i class="bi bi-plus-circle me-1"></i>Ajouter au projet</button>
                     </div>
                 </div>
-            </div> <div class="row mt-5 pb-5">
+
+            <!-- SECTION GESTION DES PROJETS -->
+            <div class="row mt-5 pb-5">
                 <div class="col-12">
                     <div class="card-custom border-top border-4 border-dark">
                         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                             <div class="d-flex align-items-center flex-grow-1">
                                 <i class="bi bi-folder2-open fs-3 me-3 text-dark"></i>
-                                <div class="w-100"><label class="small text-muted mb-0">Nom du Projet / Client</label><input type="text" id="project-name" class="form-control fw-bold border-0 p-0 fs-4 bg-transparent" placeholder="Mon Chantier..." oninput="saveProjectName()" style="box-shadow: none;"></div>
+                                <div class="w-100"><input type="text" id="project-name" class="form-control fw-bold border-0 p-0 fs-4 bg-transparent" placeholder="Mon Chantier..." oninput="saveProjectName()"></div>
                             </div>
                             <div><button onclick="genererPDF()" class="btn btn-dark btn-sm"><i class="bi bi-file-earmark-pdf me-1"></i>Exporter PDF</button></div>
                         </div>
@@ -293,7 +231,7 @@
                             </table>
                         </div>
                         <div id="empty-projet-msg" class="text-center text-muted py-4">Aucun calcul enregistré.</div>
-                        <div id="zone-totaux" class="bg-light p-3 rounded border" style="display:none;"><h6 class="fw-bold text-uppercase text-muted mb-3"><i class="bi bi-calculator me-2"></i>Totaux Globaux (Approvisionnement)</h6><div class="row g-3" id="container-totaux"></div></div>
+                        <div id="zone-totaux" class="bg-light p-3 rounded border" style="display:none;"><h6 class="fw-bold text-uppercase text-muted mb-3"><i class="bi bi-calculator me-2"></i>Totaux Globaux</h6><div class="row g-3" id="container-totaux"></div></div>
                     </div>
                 </div>
             </div>
@@ -310,7 +248,7 @@
         </div>
 
         <div id="section-favoris" class="fade-in" style="display: none;">
-            <div class="mb-4"><h2 class="fw-bold mb-1">Mes Favoris</h2><p class="text-muted">Vos ressources sauvegardées.</p></div>
+            <div class="mb-4"><h2 class="fw-bold mb-1">Mes Favoris</h2></div>
             <div class="card-custom p-0 overflow-hidden"><div class="table-responsive"><table class="table table-custom table-hover m-0"><thead><tr><th class="ps-4">Nom</th><th>Type</th><th>Infos</th><th class="text-end pe-4">Action</th></tr></thead><tbody id="favBody"><tr><td colspan="4" class="text-center p-4 text-muted">Vous n'avez pas encore de favoris.</td></tr></tbody></table></div></div>
         </div>
 
@@ -322,451 +260,15 @@
             </div>
         </div>
 
-    </div> <footer class="footer mt-auto py-4 bg-white border-top">
+    </div>
+
+    <footer class="footer mt-auto py-4 bg-white border-top">
         <div class="container text-center"><p class="m-0 fw-bold mb-2">ProRessources &copy; 2025</p></div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
-    
-    <script>
-        console.log("App started");
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="app.js"></script>
 
-        // --- CALCULS ---
-        function calcPoids() { const L = (parseFloat(document.getElementById('calc-L').value)||0)/1000, l = (parseFloat(document.getElementById('calc-l').value)||0)/1000, ep = (parseFloat(document.getElementById('calc-ep').value)||0)/1000, mat = parseFloat(document.getElementById('calc-mat').value)||750; document.getElementById('res-poids').innerText = (L*l*ep*mat).toFixed(2); }
-        function calcSurf() { const L = parseFloat(document.getElementById('surf-L').value)||0, H = parseFloat(document.getElementById('surf-H').value)||0, d = parseFloat(document.getElementById('surf-deduct').value)||0; document.getElementById('res-surf').innerText = Math.max(0, (L*H)-d).toFixed(2); }
-        function convInchToMm() { document.getElementById('conv-mm').value = (parseFloat(document.getElementById('conv-inch').value)*25.4).toFixed(2); }
-        function convMmToInch() { document.getElementById('conv-inch').value = (parseFloat(document.getElementById('conv-mm').value)/25.4).toFixed(3); }
-
-        function calcEscalier() {
-            const ht=parseFloat(document.getElementById('esc-ht').value), type=document.getElementById('esc-type').value, large=parseFloat(document.getElementById('esc-largeur').value);
-            let rec=parseFloat(document.getElementById('esc-rec').value), tr=parseFloat(document.getElementById('esc-tremie').value)||0, ep=parseFloat(document.getElementById('esc-dalle').value)||0;
-            const box=document.querySelector('#esc-ht').closest('.card-custom').querySelector('.result-box');
-            if(!ht){document.getElementById('esc-res-titre').innerHTML="..."; box.style.borderLeft="none"; document.getElementById('esc-details').style.display="none"; return;}
-            let nb=Math.max(2, Math.round(ht/175)); let h=ht/nb, g = (rec>0)? rec/(nb-1) : 630-(2*h); if(!rec) rec=g*(nb-1);
-            let pas=(2*h)+g, status="success"; if(pas<570 || pas>670) status="danger"; else if(pas<600 || pas>650) status="warning";
-            document.getElementById('esc-details').style.display="block";
-            document.getElementById('res-angle').innerText = (Math.atan(h/g)*(180/Math.PI)).toFixed(1)+"°";
-            let sol=rec, solExt = (type==='L' && large>0) ? sol+(large*0.785) : sol;
-            let limInt=Math.sqrt(Math.pow(ht,2)+Math.pow(sol,2)), limExt=Math.sqrt(Math.pow(ht,2)+Math.pow(solExt,2));
-            document.getElementById('res-limon-int').innerText = ((limInt+300)/1000).toFixed(2)+" m";
-            document.getElementById('res-limon-ext').innerText = ((limExt+300)/1000).toFixed(2)+" m";
-            if(tr>0 && ep>0) { document.getElementById('esc-echappee-box').style.display="block"; let dist=sol-tr, ech=(dist<0)?9999 : ht-(Math.ceil(dist/g)*h)-ep; document.getElementById('res-echappee-val').innerText = (ech>2500)?"∞":(ech/1000).toFixed(2)+" m"; } else document.getElementById('esc-echappee-box').style.display="none";
-            document.getElementById('esc-res-titre').innerHTML = `${nb} hauteurs / ${nb-1} marches`; document.getElementById('esc-res-txt').innerHTML = `h: ${h.toFixed(1)} | g: ${g.toFixed(1)}`; box.style.borderLeft = `5px solid ${status==='success'?'#198754':(status==='warning'?'#ffc107':'#dc3545')}`;
-        }
-
-        function calcPlafond() {
-            const L=parseFloat(document.getElementById('plaf-L').value), l=parseFloat(document.getElementById('plaf-l').value), type=document.getElementById('plaf-type').value;
-            const box=document.querySelector('#plaf-L').closest('.card-custom').querySelector('.result-box');
-            if(!L || !l){document.getElementById('plaf-res-titre').innerHTML="..."; box.style.borderLeft="none"; document.getElementById('plaf-matos').style.display="none"; return;}
-            let dL=(type==="1200-600")?1200:600, dl=600; let nbL=Math.ceil(L/dL), nbl=Math.ceil(l/dl);
-            document.getElementById('plaf-res-titre').innerText = ((L*l)/1000000).toFixed(2)+" m²";
-            box.style.borderLeft="5px solid #0d6efd"; document.getElementById('plaf-matos').style.display="flex";
-            document.getElementById('qty-dalles').innerText = nbL*nbl;
-            document.getElementById('qty-porteurs').innerText = Math.ceil((Math.ceil((Math.min(L,l)/1000)/1.2)*Math.max(L,l)/1000)/3.6);
-            document.getElementById('qty-cornieres').innerText = Math.ceil(((L+l)*2/1000)/3);
-            document.getElementById('qty-ent-1200').innerText = Math.ceil(((L*l/1000000)*1.7)/1.2);
-            document.getElementById('qty-ent-600').innerText = (type==="600-600")?Math.ceil(((L*l/1000000)*0.85)/0.6):0;
-        }
-
-        function calcCarrelage() {
-            const L=parseFloat(document.getElementById('carr-L').value), l=parseFloat(document.getElementById('carr-l').value), tL=parseFloat(document.getElementById('tile-L').value), tl=parseFloat(document.getElementById('tile-l').value);
-            const box=document.querySelector('#carr-L').closest('.card-custom').querySelector('.result-box');
-            if(!L||!l||!tL||!tl){ box.style.borderLeft="none"; document.getElementById('carr-details').style.display="none"; return;}
-            let nbL=Math.ceil(L/(tL*10)), nbl=Math.ceil(l/(tl*10)); let surf=(L*l)/1000000, perim=(L+l)*2/1000;
-            let colle = Math.ceil(surf * (Math.max(tL,tl)>=40 ? 8 : 4.5) * 1.10);
-            document.getElementById('carr-res-titre').innerText = "Surface : " + surf.toFixed(2) + " m²";
-            box.style.borderLeft="5px solid #0dcaf0"; document.getElementById('carr-details').style.display="flex";
-            document.getElementById('res-nb-carreaux').innerText = Math.ceil((nbL*nbl)*1.05);
-            document.getElementById('res-grille-info').innerText = `Grille: ${nbL} x ${nbl}`;
-            document.getElementById('res-colle').innerText = colle;
-            document.getElementById('res-plinthes-nb').innerText = Math.ceil((Math.ceil(perim/(Math.max(tL,tl)/100)))*1.05);
-            document.getElementById('res-plinthes-ml').innerText = perim.toFixed(2)+" m";
-        }
-
-        // --- GESTION PROJET & PDF ---
-        let monProjet = JSON.parse(localStorage.getItem('monProjet')) || [];
-        let editModeId = null;
-        document.getElementById('project-name').value = localStorage.getItem('nomProjet') || "";
-        updateProjetTable();
-
-        function saveProjectName() { localStorage.setItem('nomProjet', document.getElementById('project-name').value); }
-
-        function ajouterAuProjet(outil) {
-            Swal.fire({
-                title: editModeId ? 'Modifier la zone ?' : 'Nom de la zone ?',
-                input: 'text', inputValue: editModeId ? monProjet.find(i => i.id === editModeId).zone : '', showCancelButton: true, confirmButtonText: editModeId ? 'Mettre à jour' : 'Ajouter'
-            }).then((result) => {
-                if (result.isConfirmed && result.value) {
-                    const zone = result.value; let details="", rawData={}, inputData={};
-                    if (outil === 'Escalier') {
-                        inputData = { type: document.getElementById('esc-type').value, largeur: document.getElementById('esc-largeur').value, ht: document.getElementById('esc-ht').value, rec: document.getElementById('esc-rec').value, tremie: document.getElementById('esc-tremie').value, dalle: document.getElementById('esc-dalle').value };
-                        details = `${inputData.type} | H: ${inputData.ht}mm`; rawData = { type: 'Escalier' }; 
-                    } else if (outil === 'Plafond') {
-                        inputData = { L: document.getElementById('plaf-L').value, l: document.getElementById('plaf-l').value, type: document.getElementById('plaf-type').value };
-                        details = `Surf: ${document.getElementById('plaf-res-titre').innerText} | ${inputData.type}`;
-                        rawData = { type: 'Plafond', dalles: parseInt(document.getElementById('qty-dalles').innerText), porteurs: parseInt(document.getElementById('qty-porteurs').innerText), cornieres: parseInt(document.getElementById('qty-cornieres').innerText), ent1200: parseInt(document.getElementById('qty-ent-1200').innerText), ent600: parseInt(document.getElementById('qty-ent-600').innerText) };
-                    } else if (outil === 'Carrelage') {
-                        inputData = { L: document.getElementById('carr-L').value, l: document.getElementById('carr-l').value, tileL: document.getElementById('tile-L').value, tilel: document.getElementById('tile-l').value };
-                        details = `Surf: ${document.getElementById('carr-res-titre').innerText.replace('Surface : ','')} | ${inputData.tileL}x${inputData.tilel}`;
-                        rawData = { type: 'Carrelage', carreaux: parseInt(document.getElementById('res-nb-carreaux').innerText), colle: parseInt(document.getElementById('res-colle').innerText), plinthes: parseInt(document.getElementById('res-plinthes-nb').innerText) };
-                    }
-                    if (editModeId) {
-                        const index = monProjet.findIndex(i => i.id === editModeId);
-                        monProjet[index] = { id: editModeId, outil, zone, details, rawData, inputData }; editModeId = null;
-                        document.getElementById('btn-add-'+outil).innerHTML = '<i class="bi bi-plus-circle me-1"></i>Ajouter au projet';
-                        document.getElementById('btn-add-'+outil).classList.remove('btn-warning'); document.getElementById('btn-add-'+outil).classList.add('btn-outline-dark');
-                    } else { monProjet.push({ id: Date.now(), outil, zone, details, rawData, inputData }); }
-                    saveAndRender();
-                }
-            });
-        }
-
-        function chargerPourModification(id) {
-            const item = monProjet.find(i => i.id === id); if (!item) return; editModeId = id; 
-            if (item.outil === 'Escalier') { document.getElementById('esc-type').value = item.inputData.type; document.getElementById('esc-largeur').value = item.inputData.largeur; document.getElementById('esc-ht').value = item.inputData.ht; document.getElementById('esc-rec').value = item.inputData.rec; calcEscalier(); document.getElementById('card-Escalier').scrollIntoView();
-            } else if (item.outil === 'Plafond') { document.getElementById('plaf-L').value = item.inputData.L; document.getElementById('plaf-l').value = item.inputData.l; document.getElementById('plaf-type').value = item.inputData.type; calcPlafond(); document.getElementById('card-Plafond').scrollIntoView();
-            } else if (item.outil === 'Carrelage') { document.getElementById('carr-L').value = item.inputData.L; document.getElementById('carr-l').value = item.inputData.l; document.getElementById('tile-L').value = item.inputData.tileL; document.getElementById('tile-l').value = item.inputData.tilel; calcCarrelage(); document.getElementById('card-Carrelage').scrollIntoView(); }
-            const btn = document.getElementById('btn-add-' + item.outil); btn.innerHTML = '<i class="bi bi-pencil-square me-1"></i>Mettre à jour'; btn.classList.remove('btn-outline-dark'); btn.classList.add('btn-warning');
-        }
-
-        function supprimerLigne(id) { monProjet = monProjet.filter(item => item.id !== id); if(editModeId === id) editModeId = null; saveAndRender(); }
-        function saveAndRender() { monProjet.sort((a, b) => a.outil.localeCompare(b.outil)); localStorage.setItem('monProjet', JSON.stringify(monProjet)); updateProjetTable(); calculerTotaux(); }
-
-        function updateProjetTable() {
-            const tbody = document.getElementById('projet-body'); tbody.innerHTML = "";
-            if (monProjet.length === 0) { document.getElementById('empty-projet-msg').style.display = "block"; document.getElementById('zone-totaux').style.display = "none";
-            } else {
-                document.getElementById('empty-projet-msg').style.display = "none"; document.getElementById('zone-totaux').style.display = "block";
-                monProjet.forEach((item) => {
-                    let badgeColor = 'bg-secondary'; let matTxt = "";
-                    if(item.outil === 'Escalier') badgeColor = 'bg-danger';
-                    if(item.outil === 'Plafond') { badgeColor = 'bg-primary'; matTxt = `${item.rawData.dalles} Dalles, ${item.rawData.porteurs} Porteurs`; }
-                    if(item.outil === 'Carrelage') { badgeColor = 'bg-info text-dark'; matTxt = `${item.rawData.carreaux} Carreaux, ${item.rawData.colle}kg Colle`; }
-                    let activeClass = (editModeId === item.id) ? "table-warning" : "";
-                    tbody.innerHTML += `<tr class="${activeClass}"><td><span class="badge ${badgeColor}">${item.outil}</span></td><td class="fw-bold">${item.zone}</td><td class="small text-muted">${item.details}</td><td class="small fw-bold">${matTxt}</td><td class="text-end"><button onclick="chargerPourModification(${item.id})" class="btn btn-sm text-primary me-1"><i class="bi bi-pencil-fill"></i></button><button onclick="supprimerLigne(${item.id})" class="btn btn-sm text-danger"><i class="bi bi-trash-fill"></i></button></td></tr>`;
-                });
-            }
-        }
-
-        function calculerTotaux() {
-            const container = document.getElementById('container-totaux'); container.innerHTML = "";
-            let t = { plafond: { dalles:0, porteurs:0, cornieres:0, ent1200:0, ent600:0 }, carrelage: { carreaux:0, colle:0, plinthes:0 } };
-            let hasP = false, hasC = false;
-            monProjet.forEach(item => {
-                if (item.outil === 'Plafond') { hasP=true; t.plafond.dalles+=item.rawData.dalles; t.plafond.porteurs+=item.rawData.porteurs; t.plafond.cornieres+=item.rawData.cornieres; t.plafond.ent1200+=item.rawData.ent1200; t.plafond.ent600+=item.rawData.ent600; }
-                else if (item.outil === 'Carrelage') { hasC=true; t.carrelage.carreaux+=item.rawData.carreaux; t.carrelage.colle+=item.rawData.colle; t.carrelage.plinthes+=item.rawData.plinthes; }
-            });
-            if(hasC) container.innerHTML += `<div class="col-md-6"><div class="p-2 border rounded bg-white h-100 border-start border-4 border-info"><strong class="d-block text-info mb-1">TOTAL CARRELAGE</strong><ul class="list-unstyled small m-0"><li>• ${t.carrelage.carreaux} Carreaux</li><li>• ${t.carrelage.colle} kg Colle</li><li>• ${t.carrelage.plinthes} Plinthes</li></ul></div></div>`;
-            if(hasP) container.innerHTML += `<div class="col-md-6"><div class="p-2 border rounded bg-white h-100 border-start border-4 border-primary"><strong class="d-block text-primary mb-1">TOTAL PLAFOND</strong><ul class="list-unstyled small m-0 row"><li class="col-6">• ${t.plafond.dalles} Dalles</li><li class="col-6">• ${t.plafond.porteurs} Porteurs</li><li class="col-6">• ${t.plafond.cornieres} Cornières</li><li class="col-6">• ${t.plafond.ent1200} Ent. 1200</li><li class="col-6">• ${t.plafond.ent600} Ent. 600</li></ul></div></div>`;
-        }
-
-        // --- GÉNÉRATION PDF (DESIGN PRO : BORDS ARRONDIS + TRAITS NOIRS) ---
-        function genererPDF() {
-            if (monProjet.length === 0) return Swal.fire("Vide", "Rien à exporter", "warning");
-
-            try {
-                const { jsPDF } = window.jspdf;
-                if (!jsPDF) throw new Error("Bibliothèque PDF non chargée.");
-                
-                const doc = new jsPDF('landscape'); 
-
-                // 1. EN-TÊTE
-                const projectName = document.getElementById('project-name').value || "Mon Chantier";
-                const date = new Date().toLocaleDateString();
-
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(10);
-                doc.setTextColor(100);
-                doc.text("Nom du Projet / Client", 14, 15);
-
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(22);
-                doc.setTextColor(33, 37, 41); 
-                doc.text(projectName, 14, 24);
-
-                doc.setFontSize(10);
-                doc.setFont("helvetica", "normal");
-                doc.text(`Date : ${date}`, 297 - 14, 24, { align: 'right' });
-
-                // 2. PRÉPARATION DONNÉES
-                let rows = monProjet.map(item => {
-                    let mat = "";
-                    if (item.outil === 'Plafond') {
-                        mat = `${item.rawData.dalles} Dalles\n${item.rawData.porteurs} Porteurs\n${item.rawData.cornieres} Cornières\n${item.rawData.ent1200} Ent.1200 / ${item.rawData.ent600} Ent.600`;
-                    } else if (item.outil === 'Carrelage') {
-                        mat = `${item.rawData.carreaux} Carreaux\n${item.rawData.colle} kg Colle\n${item.rawData.plinthes} Plinthes`;
-                    } else {
-                        mat = item.materials || "-";
-                    }
-                    return [item.outil, item.zone, item.details, mat];
-                });
-
-                const colors = {
-                    'Carrelage': [13, 202, 240], // Cyan
-                    'Plafond': [13, 110, 253],   // Bleu
-                    'Escalier': [220, 53, 69]    // Rouge
-                };
-
-                // 3. TABLEAU (Traits Noirs & Cadre Arrondi)
-                doc.autoTable({
-                    head: [['Lot', 'Zone', 'Détails', 'Matériaux']],
-                    body: rows,
-                    startY: 35,
-                    theme: 'grid', // Grille complète
-                    
-                    // Styles globaux (Traits noirs)
-                    styles: { 
-                        font: "helvetica",
-                        fontSize: 10,
-                        cellPadding: 5, 
-                        valign: 'middle',
-                        lineColor: [0, 0, 0], // NOIR
-                        lineWidth: 0.1,       // Trait fin
-                        overflow: 'linebreak' 
-                    },
-                    
-                    // En-tête (Gris clair)
-                    headStyles: { 
-                        fillColor: [240, 240, 240], 
-                        textColor: [0, 0, 0], // Texte noir
-                        fontStyle: 'bold',
-                        lineColor: [0, 0, 0], // Bordure noire
-                        lineWidth: 0.1
-                    },
-                    
-                    // Colonnes
-                    columnStyles: {
-                        0: { cellWidth: 35, fontStyle: 'bold', textColor: [255, 255, 255] }, 
-                        1: { cellWidth: 40, fontStyle: 'bold' }, 
-                        2: { cellWidth: 90, textColor: [80, 80, 80] }, 
-                        3: { fontStyle: 'bold' } 
-                    },
-
-                    // Dessin des badges colorés
-                    willDrawCell: function (data) {
-                        if (data.section === 'body' && data.column.index === 0) {
-                            const c = colors[data.cell.raw] || [100, 100, 100];
-                            doc.setFillColor(...c);
-                            doc.roundedRect(data.cell.x + 2, data.cell.y + 2, data.cell.width - 4, data.cell.height - 4, 2, 2, 'F');
-                            doc.setTextColor(255, 255, 255);
-                            data.cell.styles.halign = 'center';
-                        }
-                    },
-
-                    // ASTUCE : Dessiner un cadre arrondi AUTOUR du tableau à la fin de chaque page
-                    didDrawPage: function (data) {
-                        const tableHeight = data.cursor.y - data.settings.startY;
-                        const tableWidth = data.table.width;
-                        
-                        // On redessine un cadre noir arrondi par dessus les bordures carrées extérieures
-                        doc.setDrawColor(0, 0, 0);
-                        doc.setLineWidth(0.3); // Un peu plus épais pour le tour
-                        doc.roundedRect(14, data.settings.startY, tableWidth, tableHeight, 3, 3);
-                    }
-                });
-
-                // 4. TOTAUX GLOBAUX (Tous les matériaux)
-                let finalY = doc.lastAutoTable.finalY + 15;
-                
-                // Calculs
-                let t = { plafond: { dalles:0, porteurs:0, cornieres:0, ent1200:0, ent600:0 }, carrelage: { carreaux:0, colle:0, plinthes:0 } };
-                let hasP=false, hasC=false;
-
-                monProjet.forEach(i => {
-                    if(i.outil==='Plafond'){
-                        hasP=true; 
-                        t.plafond.dalles+=i.rawData.dalles; 
-                        t.plafond.porteurs+=i.rawData.porteurs;
-                        t.plafond.cornieres+=i.rawData.cornieres;
-                        t.plafond.ent1200+=i.rawData.ent1200;
-                        t.plafond.ent600+=i.rawData.ent600;
-                    } 
-                    else if(i.outil==='Carrelage'){
-                        hasC=true; 
-                        t.carrelage.carreaux+=i.rawData.carreaux; 
-                        t.carrelage.colle+=i.rawData.colle; 
-                        t.carrelage.plinthes+=i.rawData.plinthes;
-                    } 
-                });
-
-                doc.setFontSize(11); doc.setTextColor(80, 80, 80); doc.setFont("helvetica", "bold");
-                if (hasP || hasC) doc.text("RÉCAPITULATIF APPROVISIONNEMENT", 14, finalY);
-                finalY += 5;
-
-                // Fonction pour dessiner une boite arrondie
-                function drawBox(x, title, c, lines) {
-                    const hBox = 25 + (lines.length * 6);
-                    // Fond blanc pour cacher les lignes si besoin
-                    doc.setFillColor(255, 255, 255);
-                    doc.roundedRect(x, finalY, 130, hBox, 3, 3, 'F');
-                    
-                    // Bordure couleur
-                    doc.setDrawColor(...c); 
-                    doc.setLineWidth(0.8); 
-                    doc.roundedRect(x, finalY, 130, hBox, 3, 3, 'S'); // S = Stroke (Contour)
-
-                    // Titre
-                    doc.setTextColor(...c); 
-                    doc.setFont("helvetica", "bold"); 
-                    doc.text(title, x+5, finalY+8);
-                    
-                    // Contenu
-                    doc.setTextColor(0, 0, 0); 
-                    doc.setFont("helvetica", "normal"); 
-                    doc.setFontSize(10);
-                    lines.forEach((l, idx) => doc.text("• "+l, x+5, finalY+16+(idx*6)));
-                }
-
-                let x=14;
-                if(hasC) { 
-                    drawBox(x, "TOTAL CARRELAGE", colors['Carrelage'], [
-                        `${t.carrelage.carreaux} Carreaux`, 
-                        `${t.carrelage.colle} kg Colle`, 
-                        `${t.carrelage.plinthes} Plinthes`
-                    ]); 
-                    x+=135; 
-                }
-                if(hasP) { 
-                    drawBox(x, "TOTAL PLAFOND", colors['Plafond'], [
-                        `${t.plafond.dalles} Dalles`, 
-                        `${t.plafond.porteurs} Porteurs`, 
-                        `${t.plafond.cornieres} Cornières`, 
-                        `${t.plafond.ent1200} Entretoises 1200`,
-                        `${t.plafond.ent600} Entretoises 600`
-                    ]); 
-                }
-
-                // 5. PIED DE PAGE (Numérotation X / Y)
-                const pC = doc.internal.getNumberOfPages();
-                for(let i=1; i<=pC; i++){
-                    doc.setPage(i);
-                    // Ligne de séparation bas
-                    doc.setDrawColor(200); 
-                    doc.setLineWidth(0.1); 
-                    doc.line(14, doc.internal.pageSize.height-15, 297-14, doc.internal.pageSize.height-15);
-                    
-                    doc.setFontSize(9); 
-                    doc.setTextColor(150); 
-                    
-                    // Copyright
-                    doc.text("ProRessources © 2025", doc.internal.pageSize.width/2, doc.internal.pageSize.height-10, {align:'center'});
-                    
-                    // Numéro de page
-                    doc.text(`Page n° ${i} / ${pC}`, 297-14, doc.internal.pageSize.height-10, {align:'right'});
-                }
-
-                doc.save(`Metre_${projectName.replace(/\s+/g,'_')}.pdf`);
-
-            } catch (e) { 
-                console.error(e); 
-                Swal.fire("Erreur PDF", "Erreur technique : " + e.message, "error"); 
-            }
-        }
-
-        function changerOnglet(o) { ['annuaire','outils','biblio','admin','favoris'].forEach(i=>{document.getElementById('section-'+i).style.display='none'; document.getElementById('btn-'+i)?.classList.remove('active');}); document.getElementById('section-'+o).style.display='block'; document.getElementById('btn-'+o)?.classList.add('active'); }
-        changerOnglet('annuaire');
-    </script>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, where, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-        // REMPLACEZ ICI PAR VOS CLES FIREBASE (Celles de la console)
-        const firebaseConfig = {
-        apiKey: "AIzaSyC70c8hVhGU7uFJad-Su2CMrm-TCxlbsoM",
-        authDomain: "proressources-3dab4.firebaseapp.com",
-        projectId: "proressources-3dab4",
-        storageBucket: "proressources-3dab4.firebasestorage.app",
-        messagingSenderId: "940538561110",
-        appId: "1:940538561110:web:f8ca7e1cbc8e73b02c31f7"
-
-        };
-
-        const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app); const provider = new GoogleAuthProvider(); const ADMIN_EMAIL = "3d.build.007@gmail.com";
-        let currentUser = null, fournisseursData = [], biblioData = [], triState = { col: 'nom', sens: 1 }, userFavorites = new Set(); 
-
-        window.loginWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e){ Swal.fire("Erreur", e.message, "error"); } }
-        window.logout = async () => { await signOut(auth); location.reload(); }
-        window.trier = function(col) { if(triState.col === col) triState.sens *= -1; else { triState.col = col; triState.sens = 1; } fa(); }
-        window.open3DViewer = function(url) {
-            const viewer = document.getElementById('viewer3d');
-            viewer.src = url;
-            const modal = new window.bootstrap.Modal(document.getElementById('modal3D'));
-            modal.show();
-        }
-
-        async function loadFavorites() {
-            if (!currentUser) return;
-            const q = query(collection(db, "favoris"), where("uid", "==", currentUser.uid));
-            const qs = await getDocs(q); userFavorites.clear(); qs.forEach((d) => userFavorites.add(d.data().itemId)); fa(); fb();
-        }
-        window.toggleFavorite = async function(type, id) {
-            if (!currentUser) { Swal.fire("Oups", "Connectez-vous !", "warning"); return; }
-            const favId = currentUser.uid + "_" + id;
-            if (userFavorites.has(id)) {
-                try { await deleteDoc(doc(db, "favoris", favId)); userFavorites.delete(id); document.getElementById(`fav-btn-${id}`)?.classList.replace('bi-star-fill', 'bi-star'); document.getElementById(`fav-btn-${id}`)?.classList.remove('text-warning'); if(document.getElementById('section-favoris').style.display === 'block') renderFavoritesPage(); } catch(e) {}
-            } else {
-                try { await setDoc(doc(db, "favoris", favId), { uid: currentUser.uid, itemId: id, type: type }); userFavorites.add(id); document.getElementById(`fav-btn-${id}`)?.classList.replace('bi-star', 'bi-star-fill'); document.getElementById(`fav-btn-${id}`)?.classList.add('text-warning'); } catch(e) {}
-            }
-        }
-
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUser = user; updateUIState(true, user); await loadFavorites();
-                const isAdmin = user.email === ADMIN_EMAIL; const isLamache = user.email.endsWith("@lamache.org");
-                if (isAdmin) { document.getElementById('nav-admin').style.display = 'block'; document.getElementById('nav-biblio-li').style.display = 'block'; toggleAds(false); }
-                else if (isLamache) { document.getElementById('nav-admin').style.display = 'none'; document.getElementById('nav-biblio-li').style.display = 'none'; toggleAds(false); }
-                else { document.getElementById('nav-admin').style.display = 'none'; document.getElementById('nav-biblio-li').style.display = 'block'; toggleAds(true); }
-                document.getElementById('nav-favoris-li').style.display = 'block';
-                if(fournisseursData.length > 0) renderFournisseurs(fournisseursData);
-            } else {
-                currentUser = null; updateUIState(false, null); document.getElementById('nav-admin').style.display = 'none'; document.getElementById('nav-biblio-li').style.display = 'none'; document.getElementById('nav-favoris-li').style.display = 'none'; userFavorites.clear(); toggleAds(true);
-                if(fournisseursData.length > 0) renderFournisseurs(fournisseursData);
-            }
-        });
-
-        function toggleAds(show) { const d = show ? 'block' : 'none'; document.getElementById('ad-left').style.display = d; document.getElementById('ad-right').style.display = d; }
-        function updateUIState(isLoggedIn, user) {
-            if (isLoggedIn) { document.getElementById('logged-out-view').style.display = 'none'; document.getElementById('logged-in-view').style.display = 'block'; document.getElementById('user-name').innerText = user.displayName.split(' ')[0]; document.getElementById('user-photo').src = user.photoURL; loadBibliotheque(); }
-            else { document.getElementById('logged-out-view').style.display = 'block'; document.getElementById('logged-in-view').style.display = 'none'; }
-            document.getElementById('auth-wall').style.display = isLoggedIn ? 'none' : 'block'; document.getElementById('biblio-content').style.display = isLoggedIn ? 'block' : 'none';
-        }
-        window.changerOnglet = function(onglet) {
-            ['annuaire', 'outils', 'biblio', 'admin', 'favoris'].forEach(id => { document.getElementById('section-'+id).style.display = 'none'; if(document.getElementById('btn-'+id)) document.getElementById('btn-'+id).classList.remove('active'); });
-            document.getElementById('section-'+onglet).style.display = 'block'; if(document.getElementById('btn-'+onglet)) document.getElementById('btn-'+onglet).classList.add('active');
-            if(onglet === 'favoris') renderFavoritesPage();
-        }
-        function renderFavoritesPage() {
-            const tbody = document.getElementById('favBody'); tbody.innerHTML = ""; let count = 0;
-            fournisseursData.forEach(item => { if (userFavorites.has(item.docId)) { count++; tbody.innerHTML += `<tr><td class="fw-bold">${item.nom}</td><td><span class="badge badge-soft badge-blue">Fournisseur</span></td><td class="text-muted small">${item.desc}</td><td class="text-end"><a href="${item.lien}" target="_blank" class="btn btn-sm btn-outline-dark">Voir</a> <button onclick="toggleFavorite('fournisseurs', '${item.docId}')" class="btn btn-sm text-danger"><i class="bi bi-x-lg"></i></button></td></tr>`; } });
-            biblioData.forEach(item => { if (userFavorites.has(item.docId)) { count++; tbody.innerHTML += `<tr><td class="fw-bold">${item.nom}</td><td><span class="badge badge-soft badge-warning text-dark">3D</span></td><td class="text-muted small">${item.logiciel}</td><td class="text-end"><a href="${item.lien}" target="_blank" class="btn btn-sm btn-outline-dark">DL</a> <button onclick="toggleFavorite('biblio', '${item.docId}')" class="btn btn-sm text-danger"><i class="bi bi-x-lg"></i></button></td></tr>`; } });
-            if (count === 0) tbody.innerHTML = `<tr><td colspan="4" class="text-center p-5 text-muted"><i class="bi bi-star display-4 d-block mb-3"></i>Aucun favori.</td></tr>`;
-        }
-
-        window.supprimerItem = async function(col, id) { Swal.fire({title:'Sûr ?', icon:'warning', showCancelButton:true, confirmButtonColor:'#d33'}).then(async (r) => { if (r.isConfirmed) { await deleteDoc(doc(db, col, id)); col === "fournisseurs" ? loadFournisseurs(true) : loadBibliotheque(true); Swal.fire('Supprimé', '', 'success'); } }) }
-        window.editerFournisseur = function(id) { const i = fournisseursData.find(x => x.docId === id); document.getElementById('adm-f-uid').value = i.docId; document.getElementById('adm-f-nom').value = i.nom; document.getElementById('adm-f-cat').value = i.categorie; document.getElementById('adm-f-desc').value = i.desc; document.getElementById('adm-f-prod').value = i.produit; document.getElementById('adm-f-lien').value = i.lien; document.getElementById('btn-save-f').innerText = "Modifier"; document.getElementById('btn-save-f').classList.replace('btn-dark', 'btn-warning'); changerOnglet('admin'); }
-        window.editerBiblio = function(id) { const i = biblioData.find(x => x.docId === id); document.getElementById('adm-b-uid').value = i.docId; document.getElementById('adm-b-nom').value = i.nom; document.getElementById('adm-b-log').value = i.logiciel; document.getElementById('adm-b-type').value = i.type; document.getElementById('adm-b-cat').value = i.categorie; document.getElementById('adm-b-desc').value = i.desc; document.getElementById('adm-b-lien').value = i.lien; document.getElementById('adm-b-visu').value = i.lien3d || ""; document.getElementById('adm-b-prix').value = i.prix; document.getElementById('btn-save-b').innerText = "Modifier"; document.getElementById('btn-save-b').classList.replace('btn-dark', 'btn-warning'); changerOnglet('admin'); }
-        window.resetAdminForms = function() { document.getElementById('formFournisseur').reset(); document.getElementById('adm-f-uid').value = ""; document.getElementById('btn-save-f').innerText="Ajouter"; document.getElementById('btn-save-f').classList.replace('btn-warning','btn-dark'); document.getElementById('formBiblio').reset(); document.getElementById('adm-b-uid').value = ""; document.getElementById('btn-save-b').innerText="Ajouter"; document.getElementById('btn-save-b').classList.replace('btn-warning','btn-dark'); }
-        
-        window.sauvegarderFournisseur = async function(e) { e.preventDefault(); const uid = document.getElementById('adm-f-uid').value; const d = { nom: document.getElementById('adm-f-nom').value, categorie: document.getElementById('adm-f-cat').value, desc: document.getElementById('adm-f-desc').value, produit: document.getElementById('adm-f-prod').value, lien: document.getElementById('adm-f-lien').value }; try { if(uid) await updateDoc(doc(db, "fournisseurs", uid), d); else await addDoc(collection(db, "fournisseurs"), d); resetAdminForms(); loadFournisseurs(true); changerOnglet('annuaire'); Swal.fire("Succès", "", "success"); } catch(e){Swal.fire("Erreur",e.message,"error");} }
-        window.sauvegarderFichier = async function(e) { e.preventDefault(); const uid = document.getElementById('adm-b-uid').value; const d = { nom: document.getElementById('adm-b-nom').value, logiciel: document.getElementById('adm-b-log').value, type: document.getElementById('adm-b-type').value, categorie: document.getElementById('adm-b-cat').value, desc: document.getElementById('adm-b-desc').value, lien: document.getElementById('adm-b-lien').value, lien3d: document.getElementById('adm-b-visu').value, prix: Number(document.getElementById('adm-b-prix').value) }; try { if(uid) await updateDoc(doc(db, "bibliotheque", uid), d); else await addDoc(collection(db, "bibliotheque"), d); resetAdminForms(); loadBibliotheque(true); changerOnglet('biblio'); Swal.fire("Succès", "", "success"); } catch(e){Swal.fire("Erreur",e.message,"error");} }
-
-        async function loadFournisseurs(force=false) { if(!force && fournisseursData.length>0) return; const s = await getDocs(collection(db, "fournisseurs")); fournisseursData=[]; s.forEach(d=>fournisseursData.push({...d.data(), docId:d.id})); document.getElementById('loader-annuaire').style.display='none'; document.getElementById('table-annuaire-wrap').style.display='table'; renderFournisseurs(fournisseursData); }
-        function renderFournisseurs(data) { const b = document.getElementById("tableBody"); b.innerHTML=""; document.getElementById("stat-f-total").innerText=data.length; document.getElementById("stat-f-cat").innerText=[...new Set(data.map(i=>i.categorie))].length; const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL; if(data.length===0) b.innerHTML="<tr><td colspan='6' class='text-center p-4 text-muted'>Aucun résultat.</td></tr>"; data.forEach(i => { let badge='badge-gray'; if(i.categorie==='Quincaillerie') badge='badge-purple'; else if(i.categorie==='Bois') badge='badge-orange'; else if(i.categorie==='Isolation') badge='badge-green'; else if(['Électricité','Métal'].includes(i.categorie)) badge='badge-blue'; let btns = isAdmin ? `<button class="btn btn-sm btn-edit" onclick="editerFournisseur('${i.docId}')"><i class="bi bi-pencil-fill"></i></button><button class="btn btn-sm btn-delete" onclick="supprimerItem('fournisseurs', '${i.docId}')"><i class="bi bi-trash-fill"></i></button>` : ''; let starClass = userFavorites.has(i.docId) ? "bi-star-fill text-warning" : "bi-star"; let starBtn = currentUser ? `<i class="bi ${starClass} btn-fav" id="fav-btn-${i.docId}" onclick="toggleFavorite('fournisseurs', '${i.docId}')"></i>` : ''; b.innerHTML+=`<tr class="table-row-hover"><td class="ps-4 d-flex align-items-center">${starBtn}<span class="fw-bold text-dark">${i.nom||""}</span></td><td><span class="badge badge-soft ${badge}">${i.categorie||""}</span></td><td class="text-muted small">${i.desc||""}</td><td>${i.produit||""}</td><td class="text-end pe-4 admin-actions">${btns}<a href="${i.lien}" target="_blank" class="btn btn-visit btn-sm">Visiter</a></td></tr>`; }); }
-        
-        async function loadBibliotheque(force=false) { if(!force && biblioData.length>0) return; const s = await getDocs(collection(db, "bibliotheque")); biblioData=[]; s.forEach(d=>biblioData.push({...d.data(), docId:d.id})); document.getElementById('loader-biblio').style.display='none'; document.getElementById('table-biblio-wrap').style.display='table'; renderBibliotheque(biblioData); }
-        function renderBibliotheque(data) { const b = document.getElementById("biblioBody"); b.innerHTML=""; document.getElementById("stat-b-total").innerText=data.length; const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL; if(data.length===0) b.innerHTML="<tr><td colspan='6' class='text-center p-4 text-muted'>Aucun fichier.</td></tr>"; data.forEach(i => { let log='background:#eee; color:#333;'; if(i.logiciel==='SolidWorks') log='background:#FFFBEB; color:#B45309; border:1px solid #FEF3C7;'; if(i.logiciel==='SketchUp') log='background:#EFF6FF; color:#1D4ED8; border:1px solid #DBEAFE;'; let btns = isAdmin ? `<button class="btn btn-sm btn-edit" onclick="editerBiblio('${i.docId}')"><i class="bi bi-pencil-fill"></i></button><button class="btn btn-sm btn-delete" onclick="supprimerItem('bibliotheque', '${i.docId}')"><i class="bi bi-trash-fill"></i></button>` : ''; let dl = i.prix===0 ? `<a href="${i.lien||'#'}" target="_blank" class="btn btn-sm btn-warning text-white fw-bold"><i class="bi bi-download"></i></a>` : `<button class="btn btn-sm btn-dark fw-bold">${i.prix} €</button>`; let starClass = userFavorites.has(i.docId) ? "bi-star-fill text-warning" : "bi-star"; let starBtn = currentUser ? `<i class="bi ${starClass} btn-fav" id="fav-btn-${i.docId}" onclick="toggleFavorite('biblio', '${i.docId}')"></i>` : ''; 
-        let visuBtn = i.lien3d ? `<button onclick="open3DViewer('${i.lien3d}')" class="btn btn-sm btn-info text-white me-2"><i class="bi bi-box"></i></button>` : '';
-        b.innerHTML+=`<tr class="table-row-hover"><td class="ps-4 d-flex align-items-center">${starBtn}<span class="fw-bold text-dark">${i.nom||""}</span></td><td><span class="badge" style="${log}">${i.logiciel}</span></td><td class="text-muted small">${i.desc||""}</td><td>${i.categorie||""}</td><td class="text-end pe-4 admin-actions">${btns}${visuBtn}${dl}</td></tr>`; }); }
-
-        const fa = () => { const s=document.getElementById("searchInput").value.toLowerCase(), t=document.getElementById("typeFilter").value; let f = fournisseursData.filter(i=>(i.nom||"").toLowerCase().includes(s) && (t===""||i.categorie===t)); f.sort((a,b)=>{ let va=(a[triState.col]||"").toLowerCase(), vb=(b[triState.col]||"").toLowerCase(); if(va<vb)return -1*triState.sens; if(va>vb)return 1*triState.sens; return 0; }); renderFournisseurs(f); };
-        document.getElementById("searchInput").addEventListener("keyup", fa); document.getElementById("typeFilter").addEventListener("change", fa);
-        const fb = () => { const s=document.getElementById("searchBiblio").value.toLowerCase(), l=document.getElementById("filterLogiciel").value; renderBibliotheque(biblioData.filter(i=>(i.nom||"").toLowerCase().includes(s) && (l===""||i.logiciel===l))); };
-        document.getElementById("searchBiblio").addEventListener("keyup", fb); document.getElementById("filterLogiciel").addEventListener("change", fb);
-        
-        loadFournisseurs();
-    </script>
 </body>
 </html>
